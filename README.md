@@ -1,6 +1,7 @@
 # Bmxtracks
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.0.3.
+BMX tracks is an open source project to list all the available bmx tracks in
+Belgium & The Netherlands
 
 ## Development server
 
