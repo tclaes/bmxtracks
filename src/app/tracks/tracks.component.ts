@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
-import { take, first, concatAll, share } from 'rxjs/operators';
+import { first, concatAll, share } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 
