@@ -1,3 +1,14 @@
+:host {
+  background: rgba(114, 255, 6, 0.8);
+  display: flex;
+  height: 10rem;
+}
+
 h1 {
+    align-self: center;
+    justify-self: center;
+  color: white;
+  font-size: 5rem;
   text-align: center;
+  width: 100%;
 }
