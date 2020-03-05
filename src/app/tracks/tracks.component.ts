@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 })
 export class TracksComponent implements OnInit {
 
-  beer$: Observable<any>;
+  beers$: Observable<any>;
 
   constructor(
     private title: Title,
@@ -22,15 +22,12 @@ export class TracksComponent implements OnInit {
 
   ngOnInit() {
     const api = this.http.get('https://api.punkapi.com/v2/beers/random');
-    this.beer$ = api.pipe(
+    this.beers$ = api.pipe(
       share(),
       concatAll(),
       first());
-    this.beer$.subscribe( beer => {
-        console.log(beer);
-        this.meta.addTags([
-        { property: 'og:title', content: beer.name }
-      ]);
+    this.beers$.subscribe( beer => {
+      this.meta.updateTag({ property: 'og:title', content: beer.name });
     });
 
     this.title.setTitle('PMC Cycling');
