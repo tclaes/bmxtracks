@@ -1,6 +1,6 @@
 {
   "name": "bmxtracks",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
     "start": "npm run serve:ssr",
@@ -35,7 +35,7 @@
     "express": "^4.15.2",
     "logrocket": "^1.0.6",
     "normalize.css": "^8.0.1",
-    "rxjs": "~6.5.4",
+    "rxjs": "~6.6.3",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.3"
   },
