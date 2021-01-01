@@ -15,7 +15,8 @@
     "dev:ssr": "ng run bmxtracks:serve-ssr",
     "serve:ssr": "node dist/server/main.js",
     "build:ssr": "ng build --prod && ng run bmxtracks:server:production",
-    "prerender": "ng run bmxtracks:prerender"
+    "prerender": "ng run bmxtracks:prerender",
+    "postinstall": "ngcc"
   },
   "private": true,
   "dependencies": {
