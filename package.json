@@ -3,19 +3,11 @@
   "version": "0.0.1",
   "scripts": {
     "ng": "ng",
-    "start": "npm run serve:ssr",
+    "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "compile:server_bak": "webpack --config webpack.server.config.js --progress --colors",
-    "build:ssr_bak": "npm run build:client-and-server-bundles && npm run compile:server",
-    "serve:ssr_bak": "node dist/server",
-    "build:client-and-server-bundles_bak": "ng build --prod && ng run bmxtracks:server:production --bundleDependencies all",
-    "dev:ssr": "ng run bmxtracks:serve-ssr",
-    "serve:ssr": "node dist/server/main.js",
-    "build:ssr": "ng build --prod && ng run bmxtracks:server:production",
-    "prerender": "ng run bmxtracks:prerender",
     "postinstall": "ngcc"
   },
   "private": true,
@@ -30,7 +22,6 @@
     "@angular/platform-server": "~11.0.5",
     "@angular/router": "~11.0.5",
     "@angular/service-worker": "~11.0.5",
-    "@nguniversal/express-engine": "^11.0.1",
     "@sentry/browser": "^5.13.2",
     "express": "^4.15.2",
     "logrocket": "^1.0.6",
@@ -62,6 +53,6 @@
     "ts-node": "~7.0.0",
     "tslint": "~6.1.0",
     "typescript": "~4.0.5",
-    "webpack-cli": "^3.1.0"
+    "webpack-cli": "^4.3.1"
   }
 }
