@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import gql from 'graphql-tag';
-import {QueryServiceService} from '../services/query-service.service';
+import {QueryServiceService} from '../../services/query-service.service';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 
@@ -45,8 +45,8 @@ export class TracksComponent implements OnInit {
         return result.map(val => {
           return {
             trackName: val.node.track[0].text,
-            trackImage: val.node.trackImage.Thumb ? val.node.trackImage.Thumb.url : null,
-            trackLink: val.node.link.url ? val.node.link.url : 'https://bmxtracks.netlify.app'
+            trackImage: (val.node?.trackImage) ? val.node.trackImage.Thumb.url : null,
+            trackLink: (val.node?.link) ? val.node.link.url : 'https://bmxtracks.netlify.app'
           };
         });
       })
