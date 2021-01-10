@@ -2,8 +2,10 @@
 <ul *ngIf="allTracks$">
   <li *ngFor="let track of allTracks$|async">
     <h2>{{track.trackName}}</h2>
-    <img *ngIf="track.trackImage" [src]="track.trackImage" alt="bmx track image" />
-    <a href="{{track.trackLink}}" target="_blank">{{track.trackLink}}</a>
+    <div class="flex">
+      <div><img *ngIf="track.trackImage" [src]="track.trackImage" alt="bmx track image" /></div>
+      <div><a href="{{track.trackLink}}" target="_blank">{{track.trackLink}}</a></div>
+    </div>
   </li>
 </ul>
 
