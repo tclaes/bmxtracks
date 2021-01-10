@@ -148,32 +148,6 @@
               "optimization": true
             }
           }
-        },
-        "serve-ssr": {
-          "builder": "@nguniversal/builders:ssr-dev-server",
-          "options": {
-            "browserTarget": "bmxtracks:build",
-            "serverTarget": "bmxtracks:server"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "bmxtracks:build:production",
-              "serverTarget": "bmxtracks:server:production"
-            }
-          }
-        },
-        "prerender": {
-          "builder": "@nguniversal/builders:prerender",
-          "options": {
-            "browserTarget": "bmxtracks:build:production",
-            "serverTarget": "bmxtracks:server:production",
-            "routes": [
-              "/"
-            ]
-          },
-          "configurations": {
-            "production": {}
-          }
         }
       }
     }

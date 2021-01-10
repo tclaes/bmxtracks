@@ -1,10 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { TracksComponent } from './tracks/tracks.component';
-import {PreviewComponent} from './components/preview/preview.component';
+import { TracksComponent } from './components/tracks/tracks.component';
 
 const routes: Routes = [
-  {path: 'preview', component: PreviewComponent},
   {path: '**', component: TracksComponent},
 ];
 

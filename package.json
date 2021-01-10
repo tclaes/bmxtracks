@@ -24,7 +24,6 @@
     "@angular/service-worker": "~11.0.5",
     "@apollo/client": "^3.0.0",
     "@sentry/browser": "^5.13.2",
-    "apollo-angular": "^2.2.0",
     "apollo-cache-inmemory": "^1.6.6",
     "apollo-client": "^2.6.10",
     "apollo-link-prismic": "^1.0.8",
