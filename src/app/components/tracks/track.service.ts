@@ -4,6 +4,8 @@ import {Injectable} from '@angular/core';
 import {QueryServiceService} from '../../services/query-service.service';
 import PrismicDOM from 'prismic-dom';
 import {UtilsService} from '../../services/utils.service';
+import {Observable} from 'rxjs';
+import {Track} from '../../general/types/types';
 
 const getAllTracks = gql`
 {
@@ -32,7 +34,7 @@ const getAllTracks = gql`
 export class TrackService {
   constructor(private dataService: QueryServiceService, private utilsService: UtilsService){}
 
-  getAllTracks() {
+  getAllTracks(): Observable<Track[]> {
     return this.dataService.getAllTracks(getAllTracks).pipe(
       map(result => {
         return result.map(val => {
@@ -42,7 +44,7 @@ export class TrackService {
             trackContent: (val.node?.content)
               ? PrismicDOM.RichText.asHtml(val.node?.content, this.utilsService.linkResolver, this.utilsService.htmlSerializer)
               : null,
-            trackLink: (val.node?.link) ? val.node.link.url : 'https://bmxtracks.netlify.app'
+            trackLink: (val.node?.link) ? val.node.link.url : 'https://bmx-tracks.netlify.app'
           };
         });
       })
