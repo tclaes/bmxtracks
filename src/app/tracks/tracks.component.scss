@@ -3,6 +3,12 @@
   padding: 0 1rem;
 }
 
+ul {
+  li {
+    list-style-type: none;
+  }
+}
+
 h1 {
   font-size: var(--font-size-h1);
 }
