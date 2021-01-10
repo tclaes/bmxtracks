@@ -22,11 +22,12 @@ export class TracksComponent implements OnInit {
   ngOnInit() {
     const query = gql`
         {
-          allTracks {
+          allTracks(sortBy: track_ASC) {
             edges {
               node {
                 track,
                 trackImage,
+                content,
                 link {
                   __typename
                   ... on _ExternalLink{
