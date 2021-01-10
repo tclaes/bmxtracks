@@ -1,28 +1,11 @@
 <h1>Club tracks</h1>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="http://pmccycling.be/">PMC Cycling</a></h2>
-    <p>Track is located in Zonhoven at the sport complex Basvelden </p>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://www.bmxzolder.be/">BMX Zolder</a></h2>
-    <p>Track is located at Circuit Zolder</p>
+<ul *ngIf="allTracks$">
+  <li *ngFor="let track of allTracks$|async">
+    <h2>{{track.trackName}}</h2>
+    <div class="flex">
+      <div><img *ngIf="track.trackImage" [src]="track.trackImage" alt="bmx track image" /></div>
+      <div><a href="{{track.trackLink}}" target="_blank">{{track.trackLink}}</a></div>
+    </div>
   </li>
 </ul>
-<h3>Allways accessible tracks</h3>
-<ul>
-  <li>
-    <h2>Meerhout</h2>
-    <p>Track is located near the tennisclub in Meerhout </p>
-    <section class="address">
-      Bevrijdingslaan 100 Meerhout
-    </section>
-  </li>
-  <li>
-    <h2>Genk pumptrack @ Kattevennen</h2>
-    <p>Track is located at Circuit Zolder</p>
-    <section class="address">
 
-    </section>
-  </li>
-</ul>

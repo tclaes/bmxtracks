@@ -1,9 +1,14 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { Title, Meta } from '@angular/platform-browser';
-import { HttpClient } from '@angular/common/http';
-import { first, concatAll, share } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import {Component, OnInit} from '@angular/core';
+import gql from 'graphql-tag';
+import {QueryServiceService} from '../services/query-service.service';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
+export interface Track {
+  trackName: string;
+  trackImage: string;
+  trackLink: string;
+}
 
 @Component({
   selector: 'app-tracks',
@@ -11,14 +16,40 @@ import { Observable } from 'rxjs';
   styleUrls: ['./tracks.component.scss']
 })
 export class TracksComponent implements OnInit {
-
-
-  constructor(
-
-  ) { }
+  allTracks$: Observable<Track[]>;
+  constructor( private dataService: QueryServiceService) {}
 
   ngOnInit() {
+    const query = gql`
+        {
+          allTracks {
+            edges {
+              node {
+                track,
+                trackImage,
+                link {
+                  __typename
+                  ... on _ExternalLink{
+                    url
+                  }
+                },
+                location
+              }
+            }
+          }
+        }
+      `;
 
+    this.allTracks$ = this.dataService.getAllTracks(query).pipe(
+      map(result => {
+        return result.map(val => {
+          return {
+            trackName: val.node.track[0].text,
+            trackImage: val.node.trackImage.Thumb ? val.node.trackImage.Thumb.url : null,
+            trackLink: val.node.link.url ? val.node.link.url : 'https://bmxtracks.netlify.app'
+          };
+        });
+      })
+    );
   }
-
 }

@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import * as Sentry from '@sentry/browser';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { PreviewComponent } from './components/preview/preview.component';
 
 Sentry.init({
   dsn: 'https://fed58f625f7845a4a04bc4880570cb6f@sentry.io/3057686'
@@ -28,13 +29,14 @@ export class SentryErrorHandler implements ErrorHandler {
   declarations: [
     AppComponent,
     HeaderComponent,
-    TracksComponent
+    TracksComponent,
+    PreviewComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     HttpClientModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [{ provide: ErrorHandler, useClass: SentryErrorHandler }],
   bootstrap: [AppComponent]
