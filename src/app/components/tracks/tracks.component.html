@@ -4,7 +4,9 @@
     <h2>{{track.trackName}}</h2>
     <div class="flex">
       <div><img *ngIf="track.trackImage" [src]="track.trackImage" alt="bmx track image" /></div>
-      <div><a href="{{track.trackLink}}" target="_blank">{{track.trackLink}}</a></div>
+      <div>
+        <div [innerHTML]="track.trackContent"></div>
+        <a href="{{track.trackLink}}" target="_blank">{{track.trackLink}}</a></div>
     </div>
   </li>
 </ul>
