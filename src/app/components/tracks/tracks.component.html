@@ -1,12 +1,16 @@
 <h1>Club tracks</h1>
-<div *ngIf="!allTracks$">
-  <h1>Loading</h1>
-</div>
 <ul *ngIf="allTracks$">
   <li *ngFor="let track of allTracks$|async">
     <h2>{{track.trackName}}</h2>
     <div class="flex">
-      <div><img *ngIf="track.trackImage" [src]="track.trackImage" loading="lazy" alt="bmx track image" /></div>
+      <div>
+        <img *ngIf="track.trackImage" [src]="track.trackImage"
+             width="200px"
+             height="200px"
+             loading="lazy"
+             alt="bmx track image"
+        />
+      </div>
       <div>
         <div [innerHTML]="track.trackContent"></div>
         <a href="{{track.trackLink}}" target="_blank" rel="noopener">{{track.trackLink}}</a></div>
