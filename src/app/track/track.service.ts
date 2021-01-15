@@ -1,11 +1,11 @@
 import gql from 'graphql-tag';
 import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {QueryServiceService} from '../../services/query-service.service';
+import {QueryServiceService} from '../services/query-service.service';
 import PrismicDOM from 'prismic-dom';
-import {UtilsService} from '../../services/utils.service';
+import {UtilsService} from '../services/utils.service';
 import {Observable} from 'rxjs';
-import {Track} from '../../general/types/types';
+import {Track} from './models/track';
 
 const getAllTracks = gql`
 {

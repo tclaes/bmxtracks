@@ -1,9 +1,21 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { TracksComponent } from './components/tracks/tracks.component';
+import {LayoutComponent} from './ui/containers/layout/layout.component';
 
 const routes: Routes = [
-  {path: '**', component: TracksComponent},
+  {
+    path: '',
+    component: LayoutComponent,
+    children: [{
+      path: '',
+      pathMatch: 'full',
+      redirectTo: '/tracks'
+    }, {
+      path: 'tracks',
+      loadChildren:
+        () => import('./track/track.module').then(m => m.TrackModule)
+    }]
+  },
 ];
 
 @NgModule({

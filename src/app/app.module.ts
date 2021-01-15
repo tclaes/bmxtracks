@@ -3,13 +3,12 @@ import { NgModule, Injectable, ErrorHandler } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './header/header.component';
-import { TracksComponent } from './components/tracks/tracks.component';
 import { HttpClientModule } from '@angular/common/http';
 
 import * as Sentry from '@sentry/browser';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { UiModule } from './ui/ui.module';
 
 Sentry.init({
   dsn: 'https://fed58f625f7845a4a04bc4880570cb6f@sentry.io/3057686'
@@ -27,14 +26,13 @@ export class SentryErrorHandler implements ErrorHandler {
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent,
-    TracksComponent,
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'serverApp' }),
+    BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    UiModule,
   ],
   providers: [{ provide: ErrorHandler, useClass: SentryErrorHandler }],
   bootstrap: [AppComponent]
