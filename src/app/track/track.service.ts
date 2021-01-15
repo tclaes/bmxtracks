@@ -12,6 +12,9 @@ const getAllTracks = gql`
   allTracks(sortBy: track_ASC) {
     edges {
       node {
+        _meta {
+          uid
+        },
         track,
         trackImage,
         content,
@@ -35,10 +38,43 @@ export class TrackService {
   constructor(private dataService: QueryServiceService, private utilsService: UtilsService){}
 
   getAllTracks(): Observable<Track[]> {
-    return this.dataService.getAllTracks(getAllTracks).pipe(
+    return this.getData(getAllTracks);
+  }
+
+  getTrackByUid(uid): Observable<Track[]> {
+    const getTrackByUid = gql`
+      {
+        allTracks(uid: "${uid}" ,sortBy: track_ASC) {
+        edges {
+          node {
+            _meta {
+              uid
+            },
+            track,
+            trackImage,
+            content,
+            link {
+              __typename
+              ... on _ExternalLink{
+                url
+              }
+            },
+            location
+          }
+        }
+      }
+    }
+    `;
+
+    return this.getData(getTrackByUid);
+  }
+
+  getData(query) {
+    return this.dataService.getTracks(query).pipe(
       map(result => {
         return result.map(val => {
           return {
+            uid: val.node._meta.uid,
             trackName: val.node.track[0].text,
             trackImage: (val.node?.trackImage) ? val.node.trackImage.Thumb.url : null,
             trackContent: (val.node?.content)

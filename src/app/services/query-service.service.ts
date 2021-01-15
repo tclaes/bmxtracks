@@ -23,7 +23,7 @@ export class QueryServiceService {
     });
   }
 
-  getAllTracks(query: DocumentNode) {
+  getTracks(query: DocumentNode) {
     return from(this.client.query({
       query
     })).pipe(

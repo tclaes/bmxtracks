@@ -13,7 +13,11 @@
       </div>
       <div>
         <div [innerHTML]="track.trackContent"></div>
-        <a href="{{track.trackLink}}" target="_blank" rel="noopener">{{track.trackLink}}</a></div>
+        <div>
+          <a [routerLink]="['/tracks', track.uid]">Meer info</a><br>
+          <a href="{{track.trackLink}}" target="_blank" rel="noopener">{{track.trackLink}} </a>
+        </div>
+      </div>
     </div>
   </li>
 </ul>

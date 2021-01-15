@@ -1,5 +1,5 @@
 export class Track {
-  public id: string;
+  public uid: string;
   public trackName: string;
   public trackImage: string;
   public trackContent: string;
