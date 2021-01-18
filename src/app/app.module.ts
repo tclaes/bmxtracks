@@ -9,6 +9,7 @@ import * as Sentry from '@sentry/browser';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { UiModule } from './ui/ui.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 Sentry.init({
   dsn: 'https://fed58f625f7845a4a04bc4880570cb6f@sentry.io/3057686'
@@ -33,6 +34,7 @@ export class SentryErrorHandler implements ErrorHandler {
     HttpClientModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     UiModule,
+    BrowserAnimationsModule,
   ],
   providers: [{ provide: ErrorHandler, useClass: SentryErrorHandler }],
   bootstrap: [AppComponent]

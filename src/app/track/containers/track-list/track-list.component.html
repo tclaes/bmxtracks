@@ -1,23 +1,23 @@
 <h1>Club tracks</h1>
 <ul *ngIf="allTracks$">
   <li *ngFor="let track of allTracks$|async">
-    <h2>{{track.trackName}}</h2>
-    <div class="flex">
-      <div>
-        <img *ngIf="track.trackImage" [src]="track.trackImage"
-             width="200px"
-             height="200px"
-             loading="lazy"
-             alt="bmx track image"
-        />
+    <div class="flex center">
+      <img *ngIf="track.trackImage" [src]="track.trackImage"
+           width="200px"
+           height="200px"
+           loading="lazy"
+           alt="bmx track image"
+      />
+    </div>
+    <div class="content">
+      <h2>{{track.trackName}}</h2>
+      <div [innerHTML]="track.trackContent"></div>
+      <div class="track-link">
+        <a href="{{track.trackLink}}" target="_blank" rel="noopener">{{track.trackLink}} </a>
       </div>
-      <div>
-        <div [innerHTML]="track.trackContent"></div>
-        <div>
-          <a [routerLink]="['/tracks', track.uid]">Meer info</a><br>
-          <a href="{{track.trackLink}}" target="_blank" rel="noopener">{{track.trackLink}} </a>
-        </div>
-      </div>
+    </div>
+    <div class="flex center more-info">
+      <a mat-stroked-button [routerLink]="['/tracks', track.uid]">Meer info</a><br>
     </div>
   </li>
 </ul>
