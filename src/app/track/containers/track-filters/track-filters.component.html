@@ -1,5 +1,10 @@
-<p>track-filters works!</p>
-
-<div *ngFor="let tag of allTags$ | async">
-  {{tag|json}}
-</div>
+<form [formGroup]="form">
+  <div formGroupName="tags">
+    <mat-checkbox class="filter-checkbox">All</mat-checkbox>
+    <mat-checkbox *ngFor="let tag of tagsFormArray.controls; let i = index"
+      class="filter-checkbox"
+                  [formControlName]="i"
+          >{{tags[i]}}
+        </mat-checkbox>
+  </div>
+</form>

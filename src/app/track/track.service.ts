@@ -87,13 +87,7 @@ export class TrackService {
   }
 
   getAllTags() {
-    return this.dataService.getTracks(getAllTags).pipe(
-      map((result) => {
-        return Array.from(
-          new Set(result.map((val) => val.node._meta.tags).flat())
-        );
-      })
-    );
+    return this.dataService.getTags(getAllTags);
   }
 
   getData(query) {

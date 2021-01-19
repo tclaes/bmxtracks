@@ -2,8 +2,12 @@
   --border-radius: 5px;
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  padding: 1rem 0;
+}
+
+app-track-filters {
+  margin-bottom: 1rem;
 }
 
 ul {
