@@ -1,36 +1,36 @@
 import gql from 'graphql-tag';
-import {concatAll, concatMap, concatMapTo, distinct, groupBy, map, mergeAll, mergeMap, tap} from 'rxjs/operators';
-import {Injectable} from '@angular/core';
-import {QueryServiceService} from '../services/query-service.service';
+import { map } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { QueryServiceService } from '../services/query-service.service';
 import PrismicDOM from 'prismic-dom';
-import {UtilsService} from '../services/utils.service';
-import {from, Observable, of} from 'rxjs';
-import {Track} from './models/track';
-import {flatMap} from 'rxjs/internal/operators';
+import { UtilsService } from '../services/utils.service';
+import { Observable } from 'rxjs';
+import { Track } from './models/track';
 
 const getAllTracks = gql`
-{
-  allTracks(sortBy: track_ASC) {
-    edges {
-      node {
-        _meta {
-          uid
-        },
-        track,
-        trackImage,
-        content,
-        link {
-          __typename
-          ... on _ExternalLink{
-            url
+  {
+    allTracks(sortBy: track_ASC) {
+      edges {
+        node {
+          _meta {
+            uid
           }
-        },
-        location
+          track
+          trackImage
+          content
+          link {
+            __typename
+            ... on _ExternalLink {
+              url
+            }
+          }
+          location
+        }
       }
     }
   }
-}
 `;
+
 const getAllTags = gql`
   {
     allTracks {
@@ -46,10 +46,13 @@ const getAllTags = gql`
 `;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TrackService {
-  constructor(private dataService: QueryServiceService, private utilsService: UtilsService){}
+  constructor(
+    private dataService: QueryServiceService,
+    private utilsService: UtilsService
+  ) {}
 
   getAllTracks(): Observable<Track[]> {
     return this.getData(getAllTracks);
@@ -84,29 +87,38 @@ export class TrackService {
   }
 
   getAllTags() {
-     return this.dataService.getTracks(getAllTags).pipe(
-       map(result => {
-         return Array.from(new Set(result.map(val => val.node._meta.tags).flat()));
-       })
-     );
+    return this.dataService.getTracks(getAllTags).pipe(
+      map((result) => {
+        return Array.from(
+          new Set(result.map((val) => val.node._meta.tags).flat())
+        );
+      })
+    );
   }
 
-    getData(query) {
+  getData(query) {
     return this.dataService.getTracks(query).pipe(
-      map(result => {
-        return result.map(val => {
+      map((result) => {
+        return result.map((val) => {
           return {
             uid: val.node._meta.uid,
             trackName: val.node.track[0].text,
-            trackImage: (val.node?.trackImage) ? val.node.trackImage.Thumb.url : null,
-            trackContent: (val.node?.content)
-              ? PrismicDOM.RichText.asHtml(val.node?.content, this.utilsService.linkResolver, this.utilsService.htmlSerializer)
+            trackImage: val.node?.trackImage
+              ? val.node.trackImage.Thumb.url
               : null,
-            trackLink: (val.node?.link) ? val.node.link.url : 'https://bmx-tracks.netlify.app'
+            trackContent: val.node?.content
+              ? PrismicDOM.RichText.asHtml(
+                  val.node?.content,
+                  this.utilsService.linkResolver,
+                  this.utilsService.htmlSerializer
+                )
+              : null,
+            trackLink: val.node?.link
+              ? val.node.link.url
+              : 'https://bmx-tracks.netlify.app',
           };
         });
       })
     );
   }
 }
-
