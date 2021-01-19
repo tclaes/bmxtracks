@@ -30,6 +30,15 @@ export class QueryServiceService {
     ).pipe(map((result) => result.data.allTracks.edges));
   }
 
+  filterTracks(query, variables) {
+    return from(
+      this.client.query({
+        query,
+        variables: { filters: variables },
+      })
+    ).pipe(map((result) => result.data.allTracks.edges));
+  }
+
   getTags(query) {
     return this.client
       .query({

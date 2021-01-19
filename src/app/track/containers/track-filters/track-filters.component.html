@@ -1,10 +1,11 @@
-<form [formGroup]="form">
+<form [formGroup]="form" (ngSubmit)="submit()">
   <div formGroupName="tags">
-    <mat-checkbox class="filter-checkbox">All</mat-checkbox>
     <mat-checkbox *ngFor="let tag of tagsFormArray.controls; let i = index"
       class="filter-checkbox"
                   [formControlName]="i"
           >{{tags[i]}}
         </mat-checkbox>
+    <button mat-stroked-button>Filter</button>
   </div>
+
 </form>

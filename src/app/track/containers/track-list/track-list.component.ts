@@ -13,6 +13,6 @@ export class TrackListComponent implements OnInit {
   constructor(private trackService: TrackService) {}
 
   ngOnInit() {
-    this.allTracks$ = this.trackService.getAllTracks();
+    this.allTracks$ = this.trackService.tracks;
   }
 }
