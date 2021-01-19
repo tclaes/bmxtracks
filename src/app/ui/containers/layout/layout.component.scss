@@ -4,7 +4,19 @@
   grid-template-rows: 100px 1fr 100px;
 }
 
+:host::before {
+  content: '';
+  background: url('../../../../assets/images/jan-kopriva-SHovE4BTOi4-unsplash.jpg') no-repeat fixed;
+  background-size: cover;
+  filter: grayscale(1);
+  height: 100vh;
+  position: fixed;
+  width: 100vw;
+  z-index: -1;
+}
+
 .main-ui {
+  background: rgba(0,0,0,.1);
   display: flex;
   flex: 1 1 1400px;
   justify-content: center;
