@@ -1,0 +1,27 @@
+:host {
+  display: grid;
+  min-height: 100vh;
+  grid-template-rows: 100px 1fr 100px;
+  grid-template-columns: 1fr minmax(auto, 1200px) 1fr;
+  grid-template-areas:
+    "header"
+    "content"
+    "footer";
+}
+
+:host::before {
+  content: '';
+  background: url('../../../../assets/images/jan-kopriva-SHovE4BTOi4-unsplash.jpg') no-repeat fixed;
+  background-size: cover;
+  filter: grayscale(1);
+  height: 100vh;
+  position: fixed;
+  width: 100vw;
+  z-index: -1;
+}
+
+.main-ui {
+  grid-area: content;
+  justify-self: center;
+  max-width: 1200px;
+}

@@ -10,13 +10,20 @@
     "e2e": "ng e2e",
     "postinstall": "ngcc"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "git-format-staged -f 'prettier --ignore-unknown --stdin --stdin-filepath \"{}\"' ."
+    }
+  },
   "private": true,
   "dependencies": {
     "@angular/animations": "~11.0.7",
+    "@angular/cdk": "^11.0.4",
     "@angular/common": "~11.0.7",
     "@angular/compiler": "~11.0.7",
     "@angular/core": "~11.0.7",
     "@angular/forms": "~11.0.7",
+    "@angular/material": "^11.0.4",
     "@angular/platform-browser": "~11.0.7",
     "@angular/platform-browser-dynamic": "~11.0.7",
     "@angular/platform-server": "~11.0.7",
@@ -33,6 +40,7 @@
     "js-cookie": "^2.2.1",
     "logrocket": "^1.0.6",
     "normalize.css": "^8.0.1",
+    "prettier": "^2.2.1",
     "prismic-dom": "^2.2.4",
     "prismic-javascript": "^3.0.2",
     "rxjs": "~6.6.3",
@@ -46,10 +54,12 @@
     "@angular/language-service": "~11.0.7",
     "@nguniversal/builders": "^11.0.1",
     "@types/express": "^4.17.0",
-    "@types/node": "^12.11.1",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "~2.0.3",
+    "@types/node": "^12.11.1",
     "codelyzer": "^6.0.0",
+    "git-format-staged": "^2.1.1",
+    "husky": "^4.3.8",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~5.1.1",
