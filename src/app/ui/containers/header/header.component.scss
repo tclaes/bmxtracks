@@ -1,15 +1,24 @@
 :host {
   background: rgba(255, 255, 255, .2);
+  grid-area: header;
   display: flex;
-  padding: .5rem;
+  height: 100px;
+  width: 100vw;
 }
 
 h1 {
   align-self: center;
-  justify-self: center;
   color: white;
   font-size: 2rem;
   text-align: center;
-  width: 100%;
+  width: 100vw;
   text-transform: uppercase;
+}
+
+:host( .fixed ){
+  background: white;
+
+  h1 {
+    color: #333;
+  }
 }

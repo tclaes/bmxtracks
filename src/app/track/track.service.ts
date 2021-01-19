@@ -1,11 +1,12 @@
 import gql from 'graphql-tag';
-import {map} from 'rxjs/operators';
+import {concatAll, concatMap, concatMapTo, distinct, groupBy, map, mergeAll, mergeMap, tap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {QueryServiceService} from '../services/query-service.service';
 import PrismicDOM from 'prismic-dom';
 import {UtilsService} from '../services/utils.service';
-import {Observable} from 'rxjs';
+import {from, Observable, of} from 'rxjs';
 import {Track} from './models/track';
+import {flatMap} from 'rxjs/internal/operators';
 
 const getAllTracks = gql`
 {
@@ -29,6 +30,19 @@ const getAllTracks = gql`
     }
   }
 }
+`;
+const getAllTags = gql`
+  {
+    allTracks {
+      edges {
+        node {
+          _meta {
+            tags
+          }
+        }
+      }
+    }
+  }
 `;
 
 @Injectable({
@@ -69,7 +83,15 @@ export class TrackService {
     return this.getData(getTrackByUid);
   }
 
-  getData(query) {
+  getAllTags() {
+     return this.dataService.getTracks(getAllTags).pipe(
+       map(result => {
+         return Array.from(new Set(result.map(val => val.node._meta.tags).flat()));
+       })
+     );
+  }
+
+    getData(query) {
     return this.dataService.getTracks(query).pipe(
       map(result => {
         return result.map(val => {
