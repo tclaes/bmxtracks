@@ -2,7 +2,6 @@
   display: grid;
   min-height: 100vh;
   grid-template-rows: 100px 1fr 100px;
-  grid-template-columns: 1fr minmax(auto, 1200px) 1fr;
   grid-template-areas:
     "header"
     "content"
@@ -23,5 +22,4 @@
 .main-ui {
   grid-area: content;
   justify-self: center;
-  max-width: 1200px;
 }
