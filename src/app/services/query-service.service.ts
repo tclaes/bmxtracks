@@ -5,7 +5,6 @@ import { PrismicLink } from 'apollo-link-prismic';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-client';
 import { map } from 'rxjs/operators';
-import { DocumentNode } from 'graphql';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +21,7 @@ export class QueryServiceService {
     });
   }
 
-  getTracks(query: DocumentNode) {
+  getTracks(query) {
     return from(
       this.client.query({
         query,

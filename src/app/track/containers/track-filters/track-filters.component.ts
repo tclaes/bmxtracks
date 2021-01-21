@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit } from '@angular/core';
 import { TrackService } from '../../track.service';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Tags } from '../../models/tags';
@@ -12,6 +12,7 @@ export class TrackFiltersComponent implements OnInit {
   allTags;
   tags: Tags[];
   form: FormGroup;
+  filterActive = false;
 
   constructor(
     private trackService: TrackService,
@@ -33,6 +34,13 @@ export class TrackFiltersComponent implements OnInit {
       .then(() =>
         this.tags.forEach(() => this.tagsFormArray.push(new FormControl(false)))
       );
+  }
+
+  checkboxChecked(event): void {
+    this.filterActive = this.form.value.tags.some((tag) => {
+      return tag;
+    });
+    // this.submit();
   }
 
   submit() {

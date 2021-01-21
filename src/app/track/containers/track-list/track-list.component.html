@@ -1,12 +1,12 @@
 <app-track-filters></app-track-filters>
 <ul *ngIf="allTracks$">
-  <li *ngFor="let track of allTracks$|async">
+  <li *ngFor="let track of allTracks$|async; trackBy: trackByFn">
     <div class="flex center">
       <img *ngIf="track.trackImage" [src]="track.trackImage"
            width="200px"
            height="200px"
-           loading="lazy"
            alt="bmx track image"
+           loading="lazy"
       />
     </div>
     <div class="content">

@@ -15,4 +15,8 @@ export class TrackListComponent implements OnInit {
   ngOnInit() {
     this.allTracks$ = this.trackService.tracks;
   }
+
+  trackByFn(index, item) {
+    return index; // or item.id
+  }
 }
