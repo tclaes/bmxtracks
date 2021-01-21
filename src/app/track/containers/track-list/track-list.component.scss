@@ -1,5 +1,6 @@
 :host {
   --border-radius: 5px;
+  --skeleton-background: #dedede;
 
   display: flex;
   flex-direction: column;
@@ -62,9 +63,26 @@ img {
   padding: 1rem;
 }
 
-.address {
-  font-size: .9rem;
+.track-link {
+  padding: 1rem 0;
 }
+
+.skeleton-image {
+  background: var(--skeleton-background);
+  height: 200px;
+  width: 100%;
+}
+
+.skeleton-content {
+  background: var(--skeleton-background);
+  height: 200px;
+}
+
+.skeleton-button {
+  height: 20px;
+  width: 50px;
+}
+
 
 
 

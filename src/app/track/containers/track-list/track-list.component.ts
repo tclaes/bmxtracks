@@ -14,9 +14,16 @@ export class TrackListComponent implements OnInit {
 
   ngOnInit() {
     this.allTracks$ = this.trackService.tracks;
+    this.loadInitialData();
   }
 
-  trackByFn(index, item) {
-    return index; // or item.id
+  skeleton(n: number) {
+    return Array(n);
+  }
+
+  private loadInitialData() {
+    this.trackService.getAllTracks().subscribe((tracks) => {
+      this.trackService.setState(tracks);
+    });
   }
 }

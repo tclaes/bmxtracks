@@ -1,6 +1,25 @@
 <app-track-filters></app-track-filters>
-<ul *ngIf="allTracks$">
-  <li *ngFor="let track of allTracks$|async; trackBy: trackByFn">
+<ng-template #loading>
+  <ul class="skeleton">
+    <li *ngFor="let track of skeleton(4)">
+      <div class="flex center">
+        <div class="skeleton-image"></div>
+      </div>
+      <div class="content">
+        <h2>TRACKNAME</h2>
+        <div class="content skeleton-content"></div>
+        <div class="track-link skeleton-link">
+          <a href="#" target="_blank" rel="noopener">SKELETON LINK</a>
+        </div>
+      </div>
+      <div class="flex center skeleton-more-info more-info">
+        <a mat-stroked-button class="skeleton-button"></a><br>
+      </div>
+    </li>
+  </ul>
+</ng-template>
+<ul *ngIf="allTracks$|async as tracks; else loading">
+  <li *ngFor="let track of tracks">
     <div class="flex center">
       <img *ngIf="track.trackImage" [src]="track.trackImage"
            width="200px"

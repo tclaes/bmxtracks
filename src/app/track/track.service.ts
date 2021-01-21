@@ -50,13 +50,13 @@ const getAllTags = gql`
 })
 export class TrackService {
   // tslint:disable-next-line:variable-name
-  private _tracks: BehaviorSubject<Track[]> = new BehaviorSubject([]);
+  private _tracks: BehaviorSubject<Track[]> = new BehaviorSubject(null);
 
   constructor(
     private dataService: QueryServiceService,
     private utilsService: UtilsService
   ) {
-    this.loadInitialData();
+    // this.loadInitialData();
   }
 
   get tracks() {
