@@ -1,8 +1,18 @@
 :host {
+  --height: 60px;
+
   background: white;
   display: flex;
   justify-content: center;
+  align-items: center;
+  min-height: var(--height);
   width: 100vw;
+}
+
+.tags-placeholder {
+  display: flex;
+  align-items: center;
+  min-height: var(--height);
 }
 
 .filter-checkbox {

@@ -1,11 +1,10 @@
-<form [formGroup]="form" (ngSubmit)="submit()">
+<div *ngIf="!tags" class="tags-placeholder">LOADING...</div>
+
+<form [formGroup]="form" (ngSubmit)="submit()" *ngIf="tags">
   <div formGroupName="tags">
     <mat-checkbox *ngFor="let tag of tagsFormArray.controls; let i = index"
-      class="filter-checkbox"
-                  [formControlName]="i"
-          >{{tags[i]}}
-        </mat-checkbox>
-    <button mat-stroked-button>Filter</button>
+      class="filter-checkbox" [formControlName]="i" (change)="checkboxChecked()"
+    >{{tags[i]}}
+    </mat-checkbox>
   </div>
-
 </form>

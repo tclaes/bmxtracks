@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { distinctUntilChanged, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { QueryServiceService } from '../services/query-service.service';
 import PrismicDOM from 'prismic-dom';
@@ -8,7 +8,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Track } from './models/track';
 
 const getAllTracks = gql`
-  {
+  query {
     allTracks(sortBy: track_ASC) {
       edges {
         node {
@@ -50,13 +50,13 @@ const getAllTags = gql`
 })
 export class TrackService {
   // tslint:disable-next-line:variable-name
-  private _tracks: BehaviorSubject<Track[]> = new BehaviorSubject([]);
+  private _tracks: BehaviorSubject<Track[]> = new BehaviorSubject(null);
 
   constructor(
     private dataService: QueryServiceService,
     private utilsService: UtilsService
   ) {
-    this.loadInitialData();
+    // this.loadInitialData();
   }
 
   get tracks() {
