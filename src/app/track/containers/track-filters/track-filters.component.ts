@@ -36,11 +36,8 @@ export class TrackFiltersComponent implements OnInit {
       );
   }
 
-  checkboxChecked(event): void {
-    this.filterActive = this.form.value.tags.some((tag) => {
-      return tag;
-    });
-    // this.submit();
+  checkboxChecked(): void {
+    this.submit();
   }
 
   submit() {
