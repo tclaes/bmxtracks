@@ -8,21 +8,30 @@
     "footer";
 }
 
-:host::before {
-  content: '';
-  background-image: url('https://res.cloudinary.com/tcla/image/upload/c_scale,w_768/v1611182732/jan-kopriva-SHovE4BTOi4-unsplash_mhofbb.jpg');
-  background-size: cover;
-  background-position: center;
-  filter: grayscale(1);
-  height: 100vh;
-  position: fixed;
-  width: 100vw;
-  z-index: -1;
+@media(max-width: 768px) {
+  :host {
+    background: #999;
+  }
 }
+
 
 @media(min-width: 768px) {
   :host::before {
-    background-image: url('https://res.cloudinary.com/ddyb9tdlf/image/upload/c_scale,w_1920/v1611182732/jan-kopriva-SHovE4BTOi4-unsplash_mhofbb.jpg');
+    content: '';
+    background-image: url('https://res.cloudinary.com/tcla/image/upload/c_scale,w_768/v1611182732/jan-kopriva-SHovE4BTOi4-unsplash_mhofbb.webp');
+    background-size: cover;
+    background-position: center;
+    filter: grayscale(1);
+    height: 100vh;
+    position: fixed;
+    width: 100vw;
+    z-index: -1;
+  }
+}
+
+@media(min-width: 1920px) {
+  :host::before {
+    background-image: url('https://res.cloudinary.com/tcla/image/upload/c_scale,w_1920/v1611182732/jan-kopriva-SHovE4BTOi4-unsplash_mhofbb.webp');
   }
 }
 
