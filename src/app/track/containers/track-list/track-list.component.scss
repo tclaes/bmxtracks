@@ -35,10 +35,16 @@ ul {
 }
 
 h2 {
-  color: rgb(184, 27, 27);
+  background: #333333;
+  color: #c0ec23;
   font-size: 1.3rem;
   font-weight: bold;
+  padding: 1rem;
   width: 100%;
+}
+
+a {
+  text-decoration: none;
 }
 
 img {
@@ -62,10 +68,6 @@ img {
   border-radius: var(--border-radius);
   margin-top: auto;
   padding: 1rem;
-}
-
-.track-link {
-  padding: 1rem 0;
 }
 
 .skeleton-image {

@@ -31,12 +31,11 @@
            loading="lazy"
       />
     </div>
-    <div class="content">
+    <a href="{{track.trackLink}}" target="_blank" rel="noopener">
       <h2>{{track.trackName}}</h2>
+    </a>
+    <div class="content">
       <div [innerHTML]="track.trackContent"></div>
-      <div class="track-link">
-        <a href="{{track.trackLink}}" target="_blank" rel="noopener">{{track.trackLink}} </a>
-      </div>
     </div>
     <div class="flex center more-info">
       <a mat-stroked-button [routerLink]="['/tracks', track.uid]">Meer info</a><br>
