@@ -8,12 +8,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { TrackFiltersComponent } from './containers/track-filters/track-filters.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReportTrackComponent } from './containers/report-track/report-track.component';
 
 @NgModule({
   declarations: [
     TrackListComponent,
     TrackDetailComponent,
     TrackFiltersComponent,
+    ReportTrackComponent,
   ],
   imports: [
     CommonModule,
