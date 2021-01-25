@@ -24,7 +24,7 @@ ul {
   li {
     background: #f3f3f3;
     border: 1px solid #333;
-    border-radius: var(--border-radius);
+    border-radius: 0 var(--border-radius) var(--border-radius);
     box-shadow: 0 0 25px 0 rgba(255, 255, 251, 0.5);
     display: flex;
     flex: 0 1 300px;
