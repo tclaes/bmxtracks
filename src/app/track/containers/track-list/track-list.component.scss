@@ -1,6 +1,7 @@
 :host {
   --border-radius: 5px;
   --skeleton-background: #dedede;
+  --min-content-height: 100px;
 
   display: flex;
   flex-direction: column;
@@ -40,7 +41,6 @@ h2 {
   font-size: 1.3rem;
   font-weight: bold;
   padding: 1rem;
-  width: 100%;
 }
 
 a {
@@ -61,6 +61,7 @@ img {
 
 .content {
   padding: 1rem 1rem .5rem;
+  min-height: var(--min-content-height);
 }
 
 .more-info {
@@ -78,7 +79,7 @@ img {
 
 .skeleton-content {
   background: var(--skeleton-background);
-  height: 200px;
+  height: var(--min-content-height);
 }
 
 .skeleton-button {
