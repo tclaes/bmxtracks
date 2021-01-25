@@ -1,6 +1,7 @@
 :host {
   --border-radius: 5px;
   --skeleton-background: #dedede;
+  --min-content-height: 100px;
 
   display: flex;
   flex-direction: column;
@@ -24,7 +25,7 @@ ul {
   li {
     background: #f3f3f3;
     border: 1px solid #333;
-    border-radius: var(--border-radius);
+    border-radius: 0 var(--border-radius) var(--border-radius);
     box-shadow: 0 0 25px 0 rgba(255, 255, 251, 0.5);
     display: flex;
     flex: 0 1 300px;
@@ -35,10 +36,15 @@ ul {
 }
 
 h2 {
-  color: rgb(184, 27, 27);
+  background: #333333;
+  color: #c0ec23;
   font-size: 1.3rem;
   font-weight: bold;
-  width: 100%;
+  padding: 1rem;
+}
+
+a {
+  text-decoration: none;
 }
 
 img {
@@ -55,6 +61,7 @@ img {
 
 .content {
   padding: 1rem 1rem .5rem;
+  min-height: var(--min-content-height);
 }
 
 .more-info {
@@ -62,10 +69,6 @@ img {
   border-radius: var(--border-radius);
   margin-top: auto;
   padding: 1rem;
-}
-
-.track-link {
-  padding: 1rem 0;
 }
 
 .skeleton-image {
@@ -76,7 +79,7 @@ img {
 
 .skeleton-content {
   background: var(--skeleton-background);
-  height: 200px;
+  height: var(--min-content-height);
 }
 
 .skeleton-button {

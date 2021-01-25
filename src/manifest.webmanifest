@@ -1,6 +1,6 @@
 {
-  "name": "bmxtracks",
-  "short_name": "bmxtracks",
+  "name": "bmx-tracks",
+  "short_name": "bmx-tracks",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",
