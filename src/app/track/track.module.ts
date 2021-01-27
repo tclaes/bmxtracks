@@ -9,6 +9,7 @@ import { TrackFiltersComponent } from './containers/track-filters/track-filters.
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ReportTrackComponent } from './containers/report-track/report-track.component';
+import { TrackCardComponent } from './containers/track-card/track-card.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { ReportTrackComponent } from './containers/report-track/report-track.com
     TrackDetailComponent,
     TrackFiltersComponent,
     ReportTrackComponent,
+    TrackCardComponent,
   ],
   imports: [
     CommonModule,
