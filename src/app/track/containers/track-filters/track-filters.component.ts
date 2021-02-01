@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TrackService } from '../../track.service';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Tags } from '../../models/tags';
@@ -12,7 +12,6 @@ export class TrackFiltersComponent implements OnInit {
   allTags;
   tags: Tags[];
   form: FormGroup;
-  filterActive = false;
 
   constructor(
     private trackService: TrackService,

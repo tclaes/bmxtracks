@@ -1,0 +1,17 @@
+<div class="flex center">
+  <img *ngIf="track.trackImage" [src]="track.trackImage"
+       width="200px"
+       height="200px"
+       alt="bmx track image"
+       loading="lazy"
+  />
+</div>
+<a href="{{track.trackLink}}" target="_blank" rel="noopener">
+  <h2>{{track.trackName}}</h2>
+</a>
+<div class="content">
+  <div [innerHTML]="track.trackContent"></div>
+</div>
+<div class="flex center more-info">
+  <a mat-stroked-button [routerLink]="['/tracks', track.uid]">Meer info</a>
+</div>

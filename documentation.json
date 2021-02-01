@@ -1,0 +1,2440 @@
+{
+    "pipes": [],
+    "interfaces": [],
+    "injectables": [
+        {
+            "name": "QueryServiceService",
+            "id": "injectable-QueryServiceService-355700aeac04c8e729e4c791c1a4a097",
+            "file": "src/app/services/query-service.service.ts",
+            "properties": [
+                {
+                    "name": "client",
+                    "type": "ApolloClient<any>",
+                    "optional": false,
+                    "description": "",
+                    "line": 13
+                }
+            ],
+            "methods": [
+                {
+                    "name": "filterTracks",
+                    "args": [
+                        {
+                            "name": "query",
+                            "type": ""
+                        },
+                        {
+                            "name": "variables",
+                            "type": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 32,
+                    "jsdoctags": [
+                        {
+                            "name": "query",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "variables",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getTags",
+                    "args": [
+                        {
+                            "name": "query",
+                            "type": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 41,
+                    "jsdoctags": [
+                        {
+                            "name": "query",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getTracks",
+                    "args": [
+                        {
+                            "name": "query",
+                            "type": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 24,
+                    "jsdoctags": [
+                        {
+                            "name": "query",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "description": "",
+            "sourceCode": "import { Injectable } from '@angular/core';\nimport { from } from 'rxjs';\n\nimport { PrismicLink } from 'apollo-link-prismic';\nimport { InMemoryCache } from 'apollo-cache-inmemory';\nimport ApolloClient from 'apollo-client';\nimport { map } from 'rxjs/operators';\n\n@Injectable({\n  providedIn: 'root',\n})\nexport class QueryServiceService {\n  client: ApolloClient<any>;\n\n  constructor() {\n    this.client = new ApolloClient({\n      link: PrismicLink({\n        uri: 'https://bmxtracks.prismic.io/graphql',\n      }),\n      cache: new InMemoryCache(),\n    });\n  }\n\n  getTracks(query) {\n    return from(\n      this.client.query({\n        query,\n      })\n    ).pipe(map((result) => result.data.allTracks.edges));\n  }\n\n  filterTracks(query, variables) {\n    return from(\n      this.client.query({\n        query,\n        variables: { filters: variables },\n      })\n    ).pipe(map((result) => result.data.allTracks.edges));\n  }\n\n  getTags(query) {\n    return this.client\n      .query({\n        query,\n      })\n      .then((result) => result.data.allTracks.edges)\n      .then((result) => result.map((tag) => tag.node._meta.tags))\n      .then((tags) => Array.from(new Set(tags.flat())));\n  }\n}\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [],
+                "line": 13
+            },
+            "type": "injectable"
+        },
+        {
+            "name": "SentryErrorHandler",
+            "id": "injectable-SentryErrorHandler-b1c48bea370a71e03d0e9b4c83662897",
+            "file": "src/app/app.module.ts",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "handleError",
+                    "args": [
+                        {
+                            "name": "error",
+                            "type": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 21,
+                    "jsdoctags": [
+                        {
+                            "name": "error",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "description": "",
+            "sourceCode": "import { BrowserModule } from '@angular/platform-browser';\nimport { NgModule, Injectable, ErrorHandler } from '@angular/core';\n\nimport { AppRoutingModule } from './app-routing.module';\nimport { AppComponent } from './app.component';\nimport { HttpClientModule } from '@angular/common/http';\n\nimport * as Sentry from '@sentry/browser';\nimport { ServiceWorkerModule } from '@angular/service-worker';\nimport { environment } from '../environments/environment';\nimport { UiModule } from './ui/ui.module';\nimport { BrowserAnimationsModule } from '@angular/platform-browser/animations';\n\nSentry.init({\n  dsn: 'https://fed58f625f7845a4a04bc4880570cb6f@sentry.io/3057686'\n});\n\n@Injectable()\nexport class SentryErrorHandler implements ErrorHandler {\n  constructor() {}\n  handleError( error ) {\n    const eventId = Sentry.captureException(error.originalError || error);\n    Sentry.showReportDialog({ eventId });\n  }\n}\n\n@NgModule({\n  declarations: [\n    AppComponent,\n  ],\n  imports: [\n    BrowserModule,\n    AppRoutingModule,\n    HttpClientModule,\n    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),\n    UiModule,\n    BrowserAnimationsModule,\n  ],\n  providers: [{ provide: ErrorHandler, useClass: SentryErrorHandler }],\n  bootstrap: [AppComponent]\n})\nexport class AppModule { }\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [],
+                "line": 19
+            },
+            "type": "injectable"
+        },
+        {
+            "name": "TrackService",
+            "id": "injectable-TrackService-1b72321a2b6bf9b129e846a191364eaf",
+            "file": "src/app/track/track.service.ts",
+            "properties": [
+                {
+                    "name": "_tracks",
+                    "defaultValue": "new BehaviorSubject(null)",
+                    "type": "BehaviorSubject<Track[]>",
+                    "optional": false,
+                    "description": "",
+                    "line": 53,
+                    "modifierKind": [
+                        112
+                    ]
+                }
+            ],
+            "methods": [
+                {
+                    "name": "filterData",
+                    "args": [
+                        {
+                            "name": "query",
+                            "type": ""
+                        },
+                        {
+                            "name": "variables",
+                            "type": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 159,
+                    "jsdoctags": [
+                        {
+                            "name": "query",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "variables",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getAllTags",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 102
+                },
+                {
+                    "name": "getAllTracks",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "Observable<Track[]>",
+                    "typeParameters": [],
+                    "line": 70
+                },
+                {
+                    "name": "getData",
+                    "args": [
+                        {
+                            "name": "query",
+                            "type": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 133,
+                    "jsdoctags": [
+                        {
+                            "name": "query",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getFilteredTracks",
+                    "args": [
+                        {
+                            "name": "filters",
+                            "type": "string[]"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 106,
+                    "jsdoctags": [
+                        {
+                            "name": "filters",
+                            "type": "string[]",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getTrackByUid",
+                    "args": [
+                        {
+                            "name": "uid",
+                            "type": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Observable<Track[]>",
+                    "typeParameters": [],
+                    "line": 74,
+                    "jsdoctags": [
+                        {
+                            "name": "uid",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "loadInitialData",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 185,
+                    "modifierKind": [
+                        112
+                    ]
+                },
+                {
+                    "name": "setState",
+                    "args": [
+                        {
+                            "name": "newState",
+                            "type": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 66,
+                    "jsdoctags": [
+                        {
+                            "name": "newState",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "description": "",
+            "sourceCode": "import gql from 'graphql-tag';\nimport { map } from 'rxjs/operators';\nimport { Injectable } from '@angular/core';\nimport { QueryServiceService } from '../services/query-service.service';\nimport PrismicDOM from 'prismic-dom';\nimport { UtilsService } from '../services/utils.service';\nimport { BehaviorSubject, Observable } from 'rxjs';\nimport { Track } from './models/track';\n\nconst getAllTracks = gql`\n  query {\n    allTracks(sortBy: track_ASC) {\n      edges {\n        node {\n          _meta {\n            uid\n          }\n          track\n          trackImage\n          content\n          link {\n            __typename\n            ... on _ExternalLink {\n              url\n            }\n          }\n          location\n        }\n      }\n    }\n  }\n`;\n\nconst getAllTags = gql`\n  {\n    allTracks {\n      edges {\n        node {\n          _meta {\n            tags\n          }\n        }\n      }\n    }\n  }\n`;\n\n@Injectable({\n  providedIn: 'root',\n})\nexport class TrackService {\n  // tslint:disable-next-line:variable-name\n  private _tracks: BehaviorSubject<Track[]> = new BehaviorSubject(null);\n\n  constructor(\n    private dataService: QueryServiceService,\n    private utilsService: UtilsService\n  ) {\n    // this.loadInitialData();\n  }\n\n  get tracks() {\n    return this._tracks.asObservable();\n  }\n\n  setState(newState) {\n    this._tracks.next(newState);\n  }\n\n  getAllTracks(): Observable<Track[]> {\n    return this.getData(getAllTracks);\n  }\n\n  getTrackByUid(uid): Observable<Track[]> {\n    const getTrackByUid = gql`\n      {\n        allTracks(uid: \"${uid}\" ,sortBy: track_ASC) {\n        edges {\n          node {\n            _meta {\n              uid\n            },\n            track,\n            trackImage,\n            content,\n            link {\n              __typename\n              ... on _ExternalLink{\n                url\n              }\n            },\n            location\n          }\n        }\n      }\n    }\n    `;\n\n    return this.getData(getTrackByUid);\n  }\n\n  getAllTags() {\n    return this.dataService.getTags(getAllTags);\n  }\n\n  getFilteredTracks(filters: string[]) {\n    const query = gql`\n      query getFilteredList($filters: [String!]) {\n        allTracks(tags: $filters) {\n          edges {\n            node {\n              _meta {\n                uid\n              }\n              track\n              trackImage\n              content\n              link {\n                __typename\n                ... on _ExternalLink {\n                  url\n                }\n              }\n              location\n            }\n          }\n        }\n      }\n    `;\n    return this.filterData(query, filters);\n  }\n\n  getData(query) {\n    return this.dataService.getTracks(query).pipe(\n      map((result) => {\n        return result.map((val) => {\n          return {\n            uid: val.node._meta.uid,\n            trackName: val.node.track[0].text,\n            trackImage: val.node?.trackImage\n              ? val.node.trackImage.Thumb.url\n              : null,\n            trackContent: val.node?.content\n              ? PrismicDOM.RichText.asHtml(\n                  val.node?.content,\n                  this.utilsService.linkResolver,\n                  this.utilsService.htmlSerializer\n                )\n              : null,\n            trackLink: val.node?.link\n              ? val.node.link.url\n              : 'https://bmx-tracks.netlify.app',\n          };\n        });\n      })\n    );\n  }\n\n  filterData(query, variables) {\n    return this.dataService.filterTracks(query, variables).pipe(\n      map((result) => {\n        return result.map((val) => {\n          return {\n            uid: val.node._meta.uid,\n            trackName: val.node.track[0].text,\n            trackImage: val.node?.trackImage\n              ? val.node.trackImage.Thumb.url\n              : null,\n            trackContent: val.node?.content\n              ? PrismicDOM.RichText.asHtml(\n                  val.node?.content,\n                  this.utilsService.linkResolver,\n                  this.utilsService.htmlSerializer\n                )\n              : null,\n            trackLink: val.node?.link\n              ? val.node.link.url\n              : 'https://bmx-tracks.netlify.app',\n          };\n        });\n      })\n    );\n  }\n\n  private loadInitialData() {\n    this.getAllTracks().subscribe((tracks) => {\n      this._tracks.next(tracks);\n    });\n  }\n}\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "dataService",
+                        "type": "QueryServiceService"
+                    },
+                    {
+                        "name": "utilsService",
+                        "type": "UtilsService"
+                    }
+                ],
+                "line": 53,
+                "jsdoctags": [
+                    {
+                        "name": "dataService",
+                        "type": "QueryServiceService",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "utilsService",
+                        "type": "UtilsService",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "accessors": {
+                "tracks": {
+                    "name": "tracks",
+                    "getSignature": {
+                        "name": "tracks",
+                        "type": "",
+                        "returnType": "",
+                        "line": 62
+                    }
+                }
+            },
+            "type": "injectable"
+        },
+        {
+            "name": "UtilsService",
+            "id": "injectable-UtilsService-d7b9d7048e416b38a221150fb8617073",
+            "file": "src/app/services/utils.service.ts",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "htmlSerializer",
+                    "args": [
+                        {
+                            "name": "type",
+                            "type": ""
+                        },
+                        {
+                            "name": "element",
+                            "type": ""
+                        },
+                        {
+                            "name": "content",
+                            "type": ""
+                        },
+                        {
+                            "name": "children",
+                            "type": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "string",
+                    "typeParameters": [],
+                    "line": 13,
+                    "jsdoctags": [
+                        {
+                            "name": "type",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "element",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "content",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "children",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "linkResolver",
+                    "args": [
+                        {
+                            "name": "doc",
+                            "type": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "string",
+                    "typeParameters": [],
+                    "line": 35,
+                    "jsdoctags": [
+                        {
+                            "name": "doc",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "description": "",
+            "sourceCode": "import { Injectable } from '@angular/core';\nimport PrismicDOM from 'prismic-dom';\n\nconst Elements = PrismicDOM.RichText.Elements;\n\n@Injectable({\n  providedIn: 'root'\n})\nexport class UtilsService {\n\n  constructor() {}\n\n  htmlSerializer(type, element, content, children) {\n    switch (type) {\n      // Add a class to paragraph elements\n      case Elements.paragraph:\n        return '<p class=\"paragraph-class\">' + children.join('') + '</p>';\n\n      // Don't wrap images in a <p> tag\n      case Elements.image:\n        return '<img src=\"' + element.url + '\" alt=\"' + element.alt + '\">';\n\n      // Add a class to hyperlinks\n      case Elements.hyperlink:\n        const target = element.data.target ? 'target=\"' + element.data.target + '\" rel=\"noopener\"' : '';\n        const linkUrl = PrismicDOM.Link.url(element.data, this.linkResolver);\n        return '<a class=\"some-link\"' + target + ' href=\"' + linkUrl + '\">' + content + '</a>';\n\n      // Return null to stick with the default behavior for all other elements\n      default:\n        return null;\n    }\n  }\n\n  linkResolver(doc) {\n    // Pretty URLs for known types\n    if (doc.type === 'blog') { return '/post/' + doc.uid; }\n    if (doc.type === 'page') { return '/' + doc.uid; }\n    // Fallback for other types, in case new custom types get created\n    return '/doc/' + doc.id;\n  }\n}\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [],
+                "line": 9
+            },
+            "type": "injectable"
+        }
+    ],
+    "classes": [
+        {
+            "name": "AppPage",
+            "id": "class-AppPage-e666007312551271a1e6ae42610b3bec",
+            "file": "e2e/src/app.po.ts",
+            "type": "class",
+            "sourceCode": "import { browser, by, element } from 'protractor';\n\nexport class AppPage {\n  navigateTo() {\n    return browser.get(browser.baseUrl) as Promise<any>;\n  }\n\n  getTitleText() {\n    return element(by.css('app-root h1')).getText() as Promise<string>;\n  }\n}\n",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "getTitleText",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 8
+                },
+                {
+                    "name": "navigateTo",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 4
+                }
+            ],
+            "indexSignatures": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": []
+        },
+        {
+            "name": "Tags",
+            "id": "class-Tags-2868d94c479f47018965946110b3d0ee",
+            "file": "src/app/track/models/tags.ts",
+            "type": "class",
+            "sourceCode": "export class Tags {\n  public tag: string;\n}\n",
+            "properties": [
+                {
+                    "name": "tag",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 2,
+                    "modifierKind": [
+                        114
+                    ]
+                }
+            ],
+            "methods": [],
+            "indexSignatures": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": []
+        },
+        {
+            "name": "Track",
+            "id": "class-Track-092abe3bec3d25251392f0ce5de414c3",
+            "file": "src/app/track/models/track.ts",
+            "type": "class",
+            "sourceCode": "export class Track {\n  public uid: string;\n  public trackName: string;\n  public trackImage: string;\n  public trackContent: string;\n  public trackLink: string;\n  public location: string;\n}\n",
+            "properties": [
+                {
+                    "name": "location",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 7,
+                    "modifierKind": [
+                        114
+                    ]
+                },
+                {
+                    "name": "trackContent",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 5,
+                    "modifierKind": [
+                        114
+                    ]
+                },
+                {
+                    "name": "trackImage",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 4,
+                    "modifierKind": [
+                        114
+                    ]
+                },
+                {
+                    "name": "trackLink",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 6,
+                    "modifierKind": [
+                        114
+                    ]
+                },
+                {
+                    "name": "trackName",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 3,
+                    "modifierKind": [
+                        114
+                    ]
+                },
+                {
+                    "name": "uid",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 2,
+                    "modifierKind": [
+                        114
+                    ]
+                }
+            ],
+            "methods": [],
+            "indexSignatures": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": []
+        }
+    ],
+    "directives": [],
+    "components": [
+        {
+            "name": "AppComponent",
+            "id": "component-AppComponent-2ca608aa6df040d6f45601227f8e02cd",
+            "file": "src/app/app.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-root",
+            "styleUrls": [
+                "./app.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./app.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "title",
+                    "defaultValue": "'bmxtracks'",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 9
+                }
+            ],
+            "methodsClass": [],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component } from '@angular/core';\n\n@Component({\n  selector: 'app-root',\n  templateUrl: './app.component.html',\n  styleUrls: ['./app.component.scss']\n})\nexport class AppComponent {\n  title = 'bmxtracks';\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "",
+                    "styleUrl": "./app.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "templateData": "<router-outlet></router-outlet>\n"
+        },
+        {
+            "name": "ButtonComponent",
+            "id": "component-ButtonComponent-642c6c4e474cd5a0ac760dfda26b2fc9",
+            "file": "src/stories/button.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "storybook-button",
+            "styleUrls": [
+                "./button.css"
+            ],
+            "styles": [],
+            "template": "<button   type=\"button\"\n   (click)=\"onClick.emit($event)\"\n   [ngClass]=\"classes\"\n   [ngStyle]=\"{ 'background-color': backgroundColor }\"\n >\n   {{ label }}\n </button>",
+            "templateUrl": [],
+            "viewProviders": [],
+            "inputsClass": [
+                {
+                    "name": "backgroundColor",
+                    "description": "<p>What background color to use</p>\n",
+                    "line": 26,
+                    "type": "string"
+                },
+                {
+                    "name": "label",
+                    "defaultValue": "'Button'",
+                    "description": "<p>Button contents</p>\n",
+                    "line": 40
+                },
+                {
+                    "name": "primary",
+                    "defaultValue": "false",
+                    "description": "<p>Is this the principal call to action on the page?</p>\n",
+                    "line": 20
+                },
+                {
+                    "name": "size",
+                    "defaultValue": "'medium'",
+                    "description": "<p>How large should the button be?</p>\n",
+                    "line": 32,
+                    "type": "\"small\" | \"medium\" | \"large\""
+                }
+            ],
+            "outputsClass": [
+                {
+                    "name": "onClick",
+                    "defaultValue": "new EventEmitter<Event>()",
+                    "description": "<p>Optional click handler</p>\n",
+                    "line": 46,
+                    "type": "EventEmitter"
+                }
+            ],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component, Input, Output, EventEmitter } from '@angular/core';\n\n@Component({\n  selector: 'storybook-button',\n  template: ` <button\n    type=\"button\"\n    (click)=\"onClick.emit($event)\"\n    [ngClass]=\"classes\"\n    [ngStyle]=\"{ 'background-color': backgroundColor }\"\n  >\n    {{ label }}\n  </button>`,\n  styleUrls: ['./button.css'],\n})\nexport default class ButtonComponent {\n  /**\n   * Is this the principal call to action on the page?\n   */\n  @Input()\n  primary = false;\n\n  /**\n   * What background color to use\n   */\n  @Input()\n  backgroundColor?: string;\n\n  /**\n   * How large should the button be?\n   */\n  @Input()\n  size: 'small' | 'medium' | 'large' = 'medium';\n\n  /**\n   * Button contents\n   *\n   * @required\n   */\n  @Input()\n  label = 'Button';\n\n  /**\n   * Optional click handler\n   */\n  @Output()\n  onClick = new EventEmitter<Event>();\n\n  public get classes(): string[] {\n    const mode = this.primary ? 'storybook-button--primary' : 'storybook-button--secondary';\n\n    return ['storybook-button', `storybook-button--${this.size}`, mode];\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": ".storybook-button {\n  font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;\n  font-weight: 700;\n  border: 0;\n  border-radius: 3em;\n  cursor: pointer;\n  display: inline-block;\n  line-height: 1;\n}\n.storybook-button--primary {\n  color: white;\n  background-color: #1ea7fd;\n}\n.storybook-button--secondary {\n  color: #333;\n  background-color: transparent;\n  box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;\n}\n.storybook-button--small {\n  font-size: 12px;\n  padding: 10px 16px;\n}\n.storybook-button--medium {\n  font-size: 14px;\n  padding: 11px 20px;\n}\n.storybook-button--large {\n  font-size: 16px;\n  padding: 12px 24px;\n}\n",
+                    "styleUrl": "./button.css"
+                }
+            ],
+            "stylesData": "",
+            "accessors": {
+                "classes": {
+                    "name": "classes",
+                    "getSignature": {
+                        "name": "classes",
+                        "type": "[]",
+                        "returnType": "string[]",
+                        "line": 48
+                    }
+                }
+            }
+        },
+        {
+            "name": "FooterComponent",
+            "id": "component-FooterComponent-b95dcf4c63a06d54096bc83911b70c45",
+            "file": "src/app/ui/containers/footer/footer.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-footer",
+            "styleUrls": [
+                "./footer.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./footer.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "year",
+                    "defaultValue": "new Date().getFullYear()",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 10
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 14
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\n\n@Component({\n  selector: 'app-footer',\n  templateUrl: './footer.component.html',\n  styleUrls: ['./footer.component.scss']\n})\nexport class FooterComponent implements OnInit {\n\n  year = new Date().getFullYear();\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": ":host {\n  background: rgba(33,33,33, .7 );\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  grid-area: footer;\n  margin-top: auto;\n  padding: 1rem;\n}\n\na {\n  color: #c0ec23;\n  font-weight: bold;\n  text-decoration: none;\n}\n\n.copy {\n  color: white;\n  font-weight: bold;\n\n  p {\n    margin: 0;\n  }\n}\n",
+                    "styleUrl": "./footer.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [],
+                "line": 10
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<div class=\"copy\">\n  <p>&copy; {{year}}</p>\n</div>\n<div class=\"report-track\">\n  <a routerLink=\"/tracks/report\">Report Track</a>\n</div>\n\n\n"
+        },
+        {
+            "name": "HeaderComponent",
+            "id": "component-HeaderComponent-246e2a69dc126a3bd76c6328dd3b93e2",
+            "file": "src/stories/header.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "storybook-header",
+            "styleUrls": [
+                "./header.css"
+            ],
+            "styles": [],
+            "template": "<header>    <div class=\"wrapper\">\n      <div>\n        <svg width=\"32\" height=\"32\" viewBox=\"0 0 32 32\" xmlns=\"http://www.w3.org/2000/svg\">\n          <g fill=\"none\" fillRule=\"evenodd\">\n            <path\n              d=\"M10 0h12a10 10 0 0110 10v12a10 10 0 01-10 10H10A10 10 0 010 22V10A10 10 0 0110 0z\"\n              fill=\"#FFF\"\n            />\n            <path\n              d=\"M5.3 10.6l10.4 6v11.1l-10.4-6v-11zm11.4-6.2l9.7 5.5-9.7 5.6V4.4z\"\n              fill=\"#555AB9\"\n            />\n            <path\n              d=\"M27.2 10.6v11.2l-10.5 6V16.5l10.5-6zM15.7 4.4v11L6 10l9.7-5.5z\"\n              fill=\"#91BAF8\"\n            />\n          </g>\n        </svg>\n        <h1>Acme</h1>\n      </div>\n      <div>\n        <storybook-button\n          *ngIf=\"user\"\n          size=\"small\"\n          (onClick)=\"onLogout.emit($event)\"\n          label=\"Log out\"\n        ></storybook-button>\n        <storybook-button\n          *ngIf=\"!user\"\n          size=\"small\"\n          (onClick)=\"onLogin.emit($event)\"\n          label=\"Log in\"\n        ></storybook-button>\n        <storybook-button\n          *ngIf=\"!user\"\n          primary\n          size=\"small\"\n          (onClick)=\"onCreateAccount.emit($event)\"\n          label=\"Sign up\"\n        ></storybook-button>\n      </div>\n    </div>\n  </header>",
+            "templateUrl": [],
+            "viewProviders": [],
+            "inputsClass": [
+                {
+                    "name": "user",
+                    "defaultValue": "null",
+                    "line": 53,
+                    "type": "unknown"
+                }
+            ],
+            "outputsClass": [
+                {
+                    "name": "onCreateAccount",
+                    "defaultValue": "new EventEmitter<Event>()",
+                    "line": 62,
+                    "type": "EventEmitter"
+                },
+                {
+                    "name": "onLogin",
+                    "defaultValue": "new EventEmitter<Event>()",
+                    "line": 56,
+                    "type": "EventEmitter"
+                },
+                {
+                    "name": "onLogout",
+                    "defaultValue": "new EventEmitter<Event>()",
+                    "line": 59,
+                    "type": "EventEmitter"
+                }
+            ],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component, Input, Output, EventEmitter } from '@angular/core';\n\n@Component({\n  selector: 'storybook-header',\n  template: `<header>\n    <div class=\"wrapper\">\n      <div>\n        <svg width=\"32\" height=\"32\" viewBox=\"0 0 32 32\" xmlns=\"http://www.w3.org/2000/svg\">\n          <g fill=\"none\" fillRule=\"evenodd\">\n            <path\n              d=\"M10 0h12a10 10 0 0110 10v12a10 10 0 01-10 10H10A10 10 0 010 22V10A10 10 0 0110 0z\"\n              fill=\"#FFF\"\n            />\n            <path\n              d=\"M5.3 10.6l10.4 6v11.1l-10.4-6v-11zm11.4-6.2l9.7 5.5-9.7 5.6V4.4z\"\n              fill=\"#555AB9\"\n            />\n            <path\n              d=\"M27.2 10.6v11.2l-10.5 6V16.5l10.5-6zM15.7 4.4v11L6 10l9.7-5.5z\"\n              fill=\"#91BAF8\"\n            />\n          </g>\n        </svg>\n        <h1>Acme</h1>\n      </div>\n      <div>\n        <storybook-button\n          *ngIf=\"user\"\n          size=\"small\"\n          (onClick)=\"onLogout.emit($event)\"\n          label=\"Log out\"\n        ></storybook-button>\n        <storybook-button\n          *ngIf=\"!user\"\n          size=\"small\"\n          (onClick)=\"onLogin.emit($event)\"\n          label=\"Log in\"\n        ></storybook-button>\n        <storybook-button\n          *ngIf=\"!user\"\n          primary\n          size=\"small\"\n          (onClick)=\"onCreateAccount.emit($event)\"\n          label=\"Sign up\"\n        ></storybook-button>\n      </div>\n    </div>\n  </header>`,\n  styleUrls: ['./header.css'],\n})\nexport default class HeaderComponent {\n  @Input()\n  user: unknown = null;\n\n  @Output()\n  onLogin = new EventEmitter<Event>();\n\n  @Output()\n  onLogout = new EventEmitter<Event>();\n\n  @Output()\n  onCreateAccount = new EventEmitter<Event>();\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": ".wrapper {\n  font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;\n  border-bottom: 1px solid rgba(0, 0, 0, 0.1);\n  padding: 15px 20px;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n\nsvg {\n  display: inline-block;\n  vertical-align: top;\n}\n\nh1 {\n  font-weight: 900;\n  font-size: 20px;\n  line-height: 1;\n  margin: 6px 0 6px 10px;\n  display: inline-block;\n  vertical-align: top;\n}\n\nbutton + button {\n  margin-left: 10px;\n}\n",
+                    "styleUrl": "./header.css"
+                }
+            ],
+            "stylesData": ""
+        },
+        {
+            "name": "HeaderComponent",
+            "id": "component-HeaderComponent-eee270a2cf58381cf2209505e7fb1dc0-1",
+            "file": "src/app/ui/containers/header/header.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-header",
+            "styleUrls": [
+                "./header.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./header.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 19
+                }
+            ],
+            "hostBindings": [
+                {
+                    "name": "class.fixed",
+                    "defaultValue": "false",
+                    "line": 15
+                }
+            ],
+            "hostListeners": [
+                {
+                    "name": "window:scroll",
+                    "args": [],
+                    "argsDecorator": [],
+                    "line": 11
+                }
+            ],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import {Component, HostBinding, HostListener, OnInit} from '@angular/core';\n\n@Component({\n  selector: 'app-header',\n  templateUrl: './header.component.html',\n  styleUrls: ['./header.component.scss']\n})\nexport class HeaderComponent implements OnInit {\n\n  @HostListener('window:scroll', [])\n  onWindowScroll() {\n    this.isScrolled = window.scrollY > 100;\n  }\n\n  @HostBinding('class.fixed') isScrolled = false;\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": ":host {\n  background: rgba(0, 0, 0, .7);\n  grid-area: header;\n  display: flex;\n  height: 100px;\n  width: 100vw;\n  justify-content: center;\n}\n\n.logo {\n  margin: 0 1rem;\n  width: 50px;\n}\n\nh1 {\n  align-self: center;\n  color: #c0ec23;\n  font-family: 'Alata', sans-serif;\n  font-size: 2rem;\n  font-weight: bold;\n  text-transform: uppercase;\n  margin: 0;\n}\n\na {\n  display: flex;\n  text-decoration: none;\n}\n",
+                    "styleUrl": "./header.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [],
+                "line": 15
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "isDuplicate": true,
+            "duplicateId": 1,
+            "duplicateName": "HeaderComponent-1",
+            "templateData": "<a routerLink=\"/\">\n  <img\n    src=\"./assets/images/logo.svg\"\n    alt=\"bmx tracks logo\"\n    class=\"logo\"\n  />\n  <h1>BMX Tracks</h1>\n</a>\n\n\n\n\n"
+        },
+        {
+            "name": "LayoutComponent",
+            "id": "component-LayoutComponent-1e481bae647e9f78c86db611e6b6cf38",
+            "file": "src/app/ui/containers/layout/layout.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-layout",
+            "styleUrls": [
+                "./layout.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./layout.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 12
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import {Component, HostListener, OnInit} from '@angular/core';\n\n@Component({\n  selector: 'app-layout',\n  templateUrl: './layout.component.html',\n  styleUrls: ['./layout.component.scss']\n})\nexport class LayoutComponent implements OnInit {\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": ":host {\n  display: grid;\n  min-height: 100vh;\n  grid-template-rows: 100px 1fr 100px;\n  grid-template-areas:\n    \"header\"\n    \"content\"\n    \"footer\";\n}\n\n@media(max-width: 768px) {\n  :host {\n    background: #999;\n  }\n}\n\n\n@media(min-width: 768px) {\n  :host::before {\n    content: '';\n    background-image: url('https://res.cloudinary.com/tcla/image/upload/c_scale,w_768/v1611182732/jan-kopriva-SHovE4BTOi4-unsplash_mhofbb.webp');\n    background-size: cover;\n    background-position: center;\n    filter: grayscale(1);\n    height: 100vh;\n    position: fixed;\n    width: 100vw;\n    z-index: -1;\n  }\n}\n\n@media(min-width: 1920px) {\n  :host::before {\n    background-image: url('https://res.cloudinary.com/tcla/image/upload/c_scale,w_1920/v1611182732/jan-kopriva-SHovE4BTOi4-unsplash_mhofbb.webp');\n  }\n}\n\n.main-ui {\n  grid-area: content;\n  justify-self: center;\n}\n",
+                    "styleUrl": "./layout.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [],
+                "line": 8
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<app-header></app-header>\n<div class=\"main-ui\">\n  <router-outlet></router-outlet>\n</div>\n<app-footer></app-footer>\n"
+        },
+        {
+            "name": "PageComponent",
+            "id": "component-PageComponent-cca1a8911321fa17756ce90c90de65cc",
+            "file": "src/stories/page.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "storybook-page",
+            "styleUrls": [
+                "./page.css"
+            ],
+            "styles": [],
+            "template": "<article>    <storybook-header\n      [user]=\"user\"\n      (onLogout)=\"onLogout.emit($event)\"\n      (onLogin)=\"onLogin.emit($event)\"\n      (onCreateAccount)=\"onCreateAccount.emit($event)\"\n    ></storybook-header>\n    <section>\n      <h2>Pages in Storybook</h2>\n      <p>\n        We recommend building UIs with a\n        <a href=\"https://componentdriven.org\" target=\"_blank\" rel=\"noopener noreferrer\">\n          <strong>component-driven</strong>\n        </a>\n        process starting with atomic components and ending with pages.\n      </p>\n      <p>\n        Render pages with mock data. This makes it easy to build and review page states without\n        needing to navigate to them in your app. Here are some handy patterns for managing page data\n        in Storybook:\n      </p>\n      <ul>\n        <li>\n          Use a higher-level connected component. Storybook helps you compose such data from the\n          \"args\" of child component stories\n        </li>\n        <li>\n          Assemble data in the page component from your services. You can mock these services out\n          using Storybook.\n        </li>\n      </ul>\n      <p>\n        Get a guided tutorial on component-driven development at\n        <a href=\"https://www.learnstorybook.com\" target=\"_blank\" rel=\"noopener noreferrer\">\n          Learn Storybook\n        </a>\n        . Read more in the\n        <a href=\"https://storybook.js.org/docs\" target=\"_blank\" rel=\"noopener noreferrer\">\n          docs\n        </a>\n        .\n      </p>\n      <div class=\"tip-wrapper\">\n        <span class=\"tip\">Tip</span> Adjust the width of the canvas with the\n        <svg width=\"10\" height=\"10\" viewBox=\"0 0 12 12\" xmlns=\"http://www.w3.org/2000/svg\">\n          <g fill=\"none\" fillRule=\"evenodd\">\n            <path\n              d=\"M1.5 5.2h4.8c.3 0 .5.2.5.4v5.1c-.1.2-.3.3-.4.3H1.4a.5.5 0 01-.5-.4V5.7c0-.3.2-.5.5-.5zm0-2.1h6.9c.3 0 .5.2.5.4v7a.5.5 0 01-1 0V4H1.5a.5.5 0 010-1zm0-2.1h9c.3 0 .5.2.5.4v9.1a.5.5 0 01-1 0V2H1.5a.5.5 0 010-1zm4.3 5.2H2V10h3.8V6.2z\"\n              id=\"a\"\n              fill=\"#999\"\n            />\n          </g>\n        </svg>\n        Viewports addon in the toolbar\n      </div>\n    </section>\n  </article>",
+            "templateUrl": [],
+            "viewProviders": [],
+            "inputsClass": [
+                {
+                    "name": "user",
+                    "defaultValue": "null",
+                    "line": 66,
+                    "type": "unknown"
+                }
+            ],
+            "outputsClass": [
+                {
+                    "name": "onCreateAccount",
+                    "defaultValue": "new EventEmitter<Event>()",
+                    "line": 75,
+                    "type": "EventEmitter"
+                },
+                {
+                    "name": "onLogin",
+                    "defaultValue": "new EventEmitter<Event>()",
+                    "line": 69,
+                    "type": "EventEmitter"
+                },
+                {
+                    "name": "onLogout",
+                    "defaultValue": "new EventEmitter<Event>()",
+                    "line": 72,
+                    "type": "EventEmitter"
+                }
+            ],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component, Input, Output, EventEmitter } from '@angular/core';\n\n@Component({\n  selector: 'storybook-page',\n  template: `<article>\n    <storybook-header\n      [user]=\"user\"\n      (onLogout)=\"onLogout.emit($event)\"\n      (onLogin)=\"onLogin.emit($event)\"\n      (onCreateAccount)=\"onCreateAccount.emit($event)\"\n    ></storybook-header>\n    <section>\n      <h2>Pages in Storybook</h2>\n      <p>\n        We recommend building UIs with a\n        <a href=\"https://componentdriven.org\" target=\"_blank\" rel=\"noopener noreferrer\">\n          <strong>component-driven</strong>\n        </a>\n        process starting with atomic components and ending with pages.\n      </p>\n      <p>\n        Render pages with mock data. This makes it easy to build and review page states without\n        needing to navigate to them in your app. Here are some handy patterns for managing page data\n        in Storybook:\n      </p>\n      <ul>\n        <li>\n          Use a higher-level connected component. Storybook helps you compose such data from the\n          \"args\" of child component stories\n        </li>\n        <li>\n          Assemble data in the page component from your services. You can mock these services out\n          using Storybook.\n        </li>\n      </ul>\n      <p>\n        Get a guided tutorial on component-driven development at\n        <a href=\"https://www.learnstorybook.com\" target=\"_blank\" rel=\"noopener noreferrer\">\n          Learn Storybook\n        </a>\n        . Read more in the\n        <a href=\"https://storybook.js.org/docs\" target=\"_blank\" rel=\"noopener noreferrer\">\n          docs\n        </a>\n        .\n      </p>\n      <div class=\"tip-wrapper\">\n        <span class=\"tip\">Tip</span> Adjust the width of the canvas with the\n        <svg width=\"10\" height=\"10\" viewBox=\"0 0 12 12\" xmlns=\"http://www.w3.org/2000/svg\">\n          <g fill=\"none\" fillRule=\"evenodd\">\n            <path\n              d=\"M1.5 5.2h4.8c.3 0 .5.2.5.4v5.1c-.1.2-.3.3-.4.3H1.4a.5.5 0 01-.5-.4V5.7c0-.3.2-.5.5-.5zm0-2.1h6.9c.3 0 .5.2.5.4v7a.5.5 0 01-1 0V4H1.5a.5.5 0 010-1zm0-2.1h9c.3 0 .5.2.5.4v9.1a.5.5 0 01-1 0V2H1.5a.5.5 0 010-1zm4.3 5.2H2V10h3.8V6.2z\"\n              id=\"a\"\n              fill=\"#999\"\n            />\n          </g>\n        </svg>\n        Viewports addon in the toolbar\n      </div>\n    </section>\n  </article>`,\n  styleUrls: ['./page.css'],\n})\nexport default class PageComponent {\n  @Input()\n  user: unknown = null;\n\n  @Output()\n  onLogin = new EventEmitter<Event>();\n\n  @Output()\n  onLogout = new EventEmitter<Event>();\n\n  @Output()\n  onCreateAccount = new EventEmitter<Event>();\n}\n\n// export const Page = ({ user, onLogin, onLogout, onCreateAccount }) => (\n//   <article>\n//     <Header user={user} onLogin={onLogin} onLogout={onLogout} onCreateAccount={onCreateAccount} />\n\n// );\n// Page.propTypes = {\n//   user: PropTypes.shape({}),\n//   onLogin: PropTypes.func.isRequired,\n//   onLogout: PropTypes.func.isRequired,\n//   onCreateAccount: PropTypes.func.isRequired,\n// };\n\n// Page.defaultProps = {\n//   user: null,\n// };\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "section {\n  font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;\n  font-size: 14px;\n  line-height: 24px;\n  padding: 48px 20px;\n  margin: 0 auto;\n  max-width: 600px;\n  color: #333;\n}\n\nh2 {\n  font-weight: 900;\n  font-size: 32px;\n  line-height: 1;\n  margin: 0 0 4px;\n  display: inline-block;\n  vertical-align: top;\n}\n\np {\n  margin: 1em 0;\n}\n\na {\n  text-decoration: none;\n  color: #1ea7fd;\n}\n\nul {\n  padding-left: 30px;\n  margin: 1em 0;\n}\n\nli {\n  margin-bottom: 8px;\n}\n\n.tip {\n  display: inline-block;\n  border-radius: 1em;\n  font-size: 11px;\n  line-height: 12px;\n  font-weight: 700;\n  background: #e7fdd8;\n  color: #66bf3c;\n  padding: 4px 12px;\n  margin-right: 10px;\n  vertical-align: top;\n}\n\n.tip-wrapper {\n  font-size: 13px;\n  line-height: 20px;\n  margin-top: 40px;\n  margin-bottom: 40px;\n}\n\n.tip-wrapper svg {\n  display: inline-block;\n  height: 12px;\n  width: 12px;\n  margin-right: 4px;\n  vertical-align: top;\n  margin-top: 3px;\n}\n\n.tip-wrapper svg path {\n  fill: #1ea7fd;\n}\n",
+                    "styleUrl": "./page.css"
+                }
+            ],
+            "stylesData": ""
+        },
+        {
+            "name": "ReportTrackComponent",
+            "id": "component-ReportTrackComponent-7b3f90ed8ae053e654acac837b3986a5",
+            "file": "src/app/track/containers/report-track/report-track.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-report-track",
+            "styleUrls": [
+                "./report-track.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./report-track.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 12
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\n\n@Component({\n  selector: 'app-report-track',\n  templateUrl: './report-track.component.html',\n  styleUrls: ['./report-track.component.scss']\n})\nexport class ReportTrackComponent implements OnInit {\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "",
+                    "styleUrl": "./report-track.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [],
+                "line": 8
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<p>report-track works!</p>\n"
+        },
+        {
+            "name": "TrackCardComponent",
+            "id": "component-TrackCardComponent-13fd5706fb1bba80c87d973a0892714a",
+            "file": "src/app/track/containers/track-card/track-card.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-track-card",
+            "styleUrls": [
+                "./track-card.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./track-card.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [
+                {
+                    "name": "track",
+                    "line": 10,
+                    "type": "Track"
+                }
+            ],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 14
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component, Input, OnInit } from '@angular/core';\nimport { Track } from '../../models/track';\n\n@Component({\n  selector: 'app-track-card',\n  templateUrl: './track-card.component.html',\n  styleUrls: ['./track-card.component.scss'],\n})\nexport class TrackCardComponent implements OnInit {\n  @Input() track: Track;\n\n  constructor() {}\n\n  ngOnInit(): void {}\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": ":host {\n  --border-radius: 5px;\n  --min-content-height: 100px;\n\n  background: #f3f3f3;\n  border: 1px solid #333;\n  border-radius: 0 var(--border-radius) var(--border-radius);\n  box-shadow: 0 0 25px 0 rgba(255, 255, 251, 0.5);\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  overflow: hidden;\n  margin: 0;\n  max-width: 300px;\n  padding: 0;\n}\n\nh2 {\n  background: #333333;\n  color: #c0ec23;\n  font-size: 1.3rem;\n  font-weight: bold;\n  margin:0;\n  padding: 1rem;\n}\n\na {\n  text-decoration: none;\n}\n\nimg {\n  width: 100%;\n\n  @media (min-width: 768px) {\n    filter: grayscale(1);\n\n    &:hover {\n      filter: grayscale(0);\n    }\n  }\n}\n\n.content {\n  padding: 1rem 1rem .5rem;\n  min-height: var(--min-content-height);\n}\n\n.more-info {\n  background: white;\n  border-radius: var(--border-radius);\n  margin-top: auto;\n  padding: 1rem;\n}\n\n\n\n\n",
+                    "styleUrl": "./track-card.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [],
+                "line": 10
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "\n  <div class=\"flex center\">\n    <img *ngIf=\"track.trackImage\" [src]=\"track.trackImage\"\n         width=\"200px\"\n         height=\"200px\"\n         alt=\"bmx track image\"\n         loading=\"lazy\"\n    />\n  </div>\n  <a href=\"{{track.trackLink}}\" target=\"_blank\" rel=\"noopener\">\n    <h2>{{track.trackName}}</h2>\n  </a>\n  <div class=\"content\">\n    <div [innerHTML]=\"track.trackContent\"></div>\n  </div>\n  <div class=\"flex center more-info\">\n    <a mat-stroked-button [routerLink]=\"['/tracks', track.uid]\">Meer info</a>\n  </div>\n"
+        },
+        {
+            "name": "TrackDetailComponent",
+            "id": "component-TrackDetailComponent-61c515f099036928c87bdca0b17d5d80",
+            "file": "src/app/track/containers/track-detail/track-detail.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-track-detail",
+            "styleUrls": [
+                "./track-detail.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./track-detail.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "track$",
+                    "type": "Observable<Track[]>",
+                    "optional": false,
+                    "description": "",
+                    "line": 15
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 21
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\nimport {Observable} from 'rxjs';\nimport {Track} from '../../models/track';\nimport {TrackService} from '../../track.service';\nimport {ActivatedRoute} from '@angular/router';\n\n\n@Component({\n  selector: 'app-track-detail',\n  templateUrl: './track-detail.component.html',\n  styleUrls: ['./track-detail.component.scss']\n})\nexport class TrackDetailComponent implements OnInit {\n\n  track$: Observable<Track[]>;\n  constructor(\n    private trackService: TrackService,\n    private activatedRoute: ActivatedRoute\n  ) { }\n\n  ngOnInit(): void {\n    this.activatedRoute.params.subscribe(params => {\n      this.track$ = this.trackService.getTrackByUid(params.id);\n    });\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "",
+                    "styleUrl": "./track-detail.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "trackService",
+                        "type": "TrackService"
+                    },
+                    {
+                        "name": "activatedRoute",
+                        "type": "ActivatedRoute"
+                    }
+                ],
+                "line": 15,
+                "jsdoctags": [
+                    {
+                        "name": "trackService",
+                        "type": "TrackService",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "activatedRoute",
+                        "type": "ActivatedRoute",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<div *ngFor=\"let track of track$|async\">\n  <h2>{{track.trackName}}</h2>\n  <div class=\"flex\">\n    <div>\n      <img *ngIf=\"track.trackImage\" [src]=\"track.trackImage\"\n           width=\"200px\"\n           height=\"200px\"\n           loading=\"lazy\"\n           alt=\"bmx track image\"\n      />\n    </div>\n    <div>\n      <div [innerHTML]=\"track.trackContent\"></div>\n      <div>\n        <a href=\"{{track.trackLink}}\" target=\"_blank\" rel=\"noopener\">{{track.trackLink}} </a>\n      </div>\n    </div>\n  </div>\n</div>\n"
+        },
+        {
+            "name": "TrackFiltersComponent",
+            "id": "component-TrackFiltersComponent-33e4235acffbc15e83fa2e8beba45e69",
+            "file": "src/app/track/containers/track-filters/track-filters.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-track-filters",
+            "styleUrls": [
+                "./track-filters.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./track-filters.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "allTags",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 12
+                },
+                {
+                    "name": "form",
+                    "type": "FormGroup",
+                    "optional": false,
+                    "description": "",
+                    "line": 14
+                },
+                {
+                    "name": "tags",
+                    "type": "Tags[]",
+                    "optional": false,
+                    "description": "",
+                    "line": 13
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "checkboxChecked",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 38
+                },
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 25
+                },
+                {
+                    "name": "submit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 42
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\nimport { TrackService } from '../../track.service';\nimport { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';\nimport { Tags } from '../../models/tags';\n\n@Component({\n  selector: 'app-track-filters',\n  templateUrl: './track-filters.component.html',\n  styleUrls: ['./track-filters.component.scss'],\n})\nexport class TrackFiltersComponent implements OnInit {\n  allTags;\n  tags: Tags[];\n  form: FormGroup;\n\n  constructor(\n    private trackService: TrackService,\n    private formBuilder: FormBuilder\n  ) {}\n\n  get tagsFormArray() {\n    return this.form.controls.tags as FormArray;\n  }\n\n  ngOnInit(): void {\n    this.form = this.formBuilder.group({\n      tags: new FormArray([]),\n    });\n\n    this.allTags = this.trackService\n      .getAllTags()\n      .then((tags: Tags[]) => (this.tags = tags))\n      .then(() =>\n        this.tags.forEach(() => this.tagsFormArray.push(new FormControl(false)))\n      );\n  }\n\n  checkboxChecked(): void {\n    this.submit();\n  }\n\n  submit() {\n    const selectedTags = this.form.value.tags\n      .map((v, i) => (v ? this.tags[i] : null))\n      .filter((v) => v !== null);\n    this.trackService\n      .getFilteredTracks(selectedTags)\n      .subscribe((val) => this.trackService.setState(val));\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": ":host {\n  --height: 60px;\n\n  background: white;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  min-height: var(--height);\n  width: 100vw;\n}\n\n.tags-placeholder {\n  display: flex;\n  align-items: center;\n  min-height: var(--height);\n}\n\n.filter-checkbox {\n  margin: 1rem;\n}\n",
+                    "styleUrl": "./track-filters.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "trackService",
+                        "type": "TrackService"
+                    },
+                    {
+                        "name": "formBuilder",
+                        "type": "FormBuilder"
+                    }
+                ],
+                "line": 14,
+                "jsdoctags": [
+                    {
+                        "name": "trackService",
+                        "type": "TrackService",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "formBuilder",
+                        "type": "FormBuilder",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "accessors": {
+                "tagsFormArray": {
+                    "name": "tagsFormArray",
+                    "getSignature": {
+                        "name": "tagsFormArray",
+                        "type": "",
+                        "returnType": "",
+                        "line": 21
+                    }
+                }
+            },
+            "templateData": "<div *ngIf=\"!tags\" class=\"tags-placeholder\">LOADING...</div>\n\n<form [formGroup]=\"form\" (ngSubmit)=\"submit()\" *ngIf=\"tags\">\n  <div formGroupName=\"tags\">\n    <mat-checkbox *ngFor=\"let tag of tagsFormArray.controls; let i = index\"\n      class=\"filter-checkbox\" [formControlName]=\"i\" (change)=\"checkboxChecked()\"\n    >{{tags[i]}}\n    </mat-checkbox>\n  </div>\n</form>\n"
+        },
+        {
+            "name": "TrackListComponent",
+            "id": "component-TrackListComponent-2023223d0b94a15cf62ac15f0dd6df7d",
+            "file": "src/app/track/containers/track-list/track-list.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-track-list",
+            "styleUrls": [
+                "./track-list.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./track-list.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "allTracks$",
+                    "type": "Observable<Track[]>",
+                    "optional": false,
+                    "description": "",
+                    "line": 12
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "loadInitialData",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 24,
+                    "modifierKind": [
+                        112
+                    ]
+                },
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 15
+                },
+                {
+                    "name": "skeleton",
+                    "args": [
+                        {
+                            "name": "n",
+                            "type": "number"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 20,
+                    "jsdoctags": [
+                        {
+                            "name": "n",
+                            "type": "number",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\nimport { Observable } from 'rxjs';\nimport { TrackService } from '../../track.service';\nimport { Track } from '../../models/track';\n\n@Component({\n  selector: 'app-track-list',\n  templateUrl: './track-list.component.html',\n  styleUrls: ['./track-list.component.scss'],\n})\nexport class TrackListComponent implements OnInit {\n  allTracks$: Observable<Track[]>;\n  constructor(private trackService: TrackService) {}\n\n  ngOnInit() {\n    this.allTracks$ = this.trackService.tracks;\n    this.loadInitialData();\n  }\n\n  skeleton(n: number) {\n    return Array(n);\n  }\n\n  private loadInitialData() {\n    this.trackService.getAllTracks().subscribe((tracks) => {\n      this.trackService.setState(tracks);\n    });\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": ":host {\n  --border-radius: 5px;\n  --skeleton-background: #dedede;\n  --min-content-height: 100px;\n\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n\napp-track-filters {\n  margin-bottom: 1rem;\n}\n\nul {\n  display: flex;\n  gap: 2.5rem;\n  justify-content: center;\n  flex-wrap: wrap;\n  margin: 0;\n  padding: 0;\n  width: 100vw;\n  max-width: 1400px;\n\n  li {\n    background: #f3f3f3;\n    border: 1px solid #333;\n    border-radius: 0 var(--border-radius) var(--border-radius);\n    box-shadow: 0 0 25px 0 rgba(255, 255, 251, 0.5);\n    display: flex;\n    flex: 0 1 300px;\n    flex-direction: column;\n    list-style-type: none;\n    overflow: hidden;\n  }\n}\n\nh2 {\n  background: #333333;\n  color: #c0ec23;\n  font-size: 1.3rem;\n  font-weight: bold;\n  margin:0;\n  padding: 1rem;\n}\n\na {\n  text-decoration: none;\n}\n\nimg {\n  width: 100%;\n\n  @media (min-width: 768px) {\n    filter: grayscale(1);\n\n    &:hover {\n      filter: grayscale(0);\n    }\n  }\n}\n\n.content {\n  padding: 1rem 1rem .5rem;\n  min-height: var(--min-content-height);\n}\n\n.more-info {\n  background: white;\n  border-radius: var(--border-radius);\n  margin-top: auto;\n  padding: 1rem;\n}\n\n.skeleton-image {\n  background: var(--skeleton-background);\n  height: 200px;\n  width: 100%;\n}\n\n.skeleton-content {\n  background: var(--skeleton-background);\n  height: var(--min-content-height);\n}\n\n.skeleton-button {\n  height: 20px;\n  width: 50px;\n}\n\n\n\n\n",
+                    "styleUrl": "./track-list.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "trackService",
+                        "type": "TrackService"
+                    }
+                ],
+                "line": 12,
+                "jsdoctags": [
+                    {
+                        "name": "trackService",
+                        "type": "TrackService",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<app-track-filters></app-track-filters>\n<ng-template #loading>\n  <ul class=\"skeleton\">\n    <li *ngFor=\"let track of skeleton(4)\">\n      <div class=\"flex center\">\n        <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"300\" height=\"200\" viewBox=\"0 0 300 200\">\n          <rect fill=\"#ddd\" width=\"300\" height=\"200\"/>\n          <text fill=\"rgba(0,0,0,0.5)\" font-family=\"sans-serif\" font-size=\"30\" dy=\"10.5\" font-weight=\"bold\" x=\"50%\" y=\"50%\" text-anchor=\"middle\">300×200</text>\n        </svg>\n      </div>\n      <h2><a href=\"#\" target=\"_blank\" rel=\"noopener\">SKELETON LINK</a></h2>\n      <div class=\"content\">\n        <div class=\"content skeleton-content\"></div>\n      </div>\n      <div class=\"flex center skeleton-more-info more-info\">\n        <a mat-stroked-button class=\"skeleton-button\"></a><br>\n      </div>\n    </li>\n  </ul>\n</ng-template>\n<ul *ngIf=\"allTracks$|async as tracks; else loading\">\n  <li *ngFor=\"let track of tracks\">\n    <app-track-card [track]=\"track\"></app-track-card>\n  </li>\n</ul>\n"
+        }
+    ],
+    "modules": [
+        {
+            "name": "AppModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "AppComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": [
+                        {
+                            "name": "AppRoutingModule"
+                        },
+                        {
+                            "name": "UiModule"
+                        }
+                    ]
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": [
+                        {
+                            "name": "AppComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "AppRoutingModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": []
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "AppServerModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": []
+                },
+                {
+                    "type": "imports",
+                    "elements": [
+                        {
+                            "name": "AppModule"
+                        }
+                    ]
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": [
+                        {
+                            "name": "AppComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "TrackModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "ReportTrackComponent"
+                        },
+                        {
+                            "name": "TrackCardComponent"
+                        },
+                        {
+                            "name": "TrackDetailComponent"
+                        },
+                        {
+                            "name": "TrackFiltersComponent"
+                        },
+                        {
+                            "name": "TrackListComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": [
+                        {
+                            "name": "TrackRoutingModule"
+                        }
+                    ]
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "TrackRoutingModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": []
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "UiModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "FooterComponent"
+                        },
+                        {
+                            "name": "HeaderComponent"
+                        },
+                        {
+                            "name": "LayoutComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        }
+    ],
+    "miscellaneous": {
+        "variables": [
+            {
+                "name": "Card",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/track/containers/track-card/track-card.stories.ts",
+                "type": "",
+                "defaultValue": "() => ({\n  component: TrackCardComponent,\n  props: {\n    track: {\n      trackImage: 'https://via.placeholder.com/300x200',\n      trackLink: 'https://www.google.com',\n      trackName: 'Trackname',\n      trackContent: `\n        <h1>Track Content goes here</h1>\n        <p>More track content</p>\n`,\n    },\n  },\n  moduleMetadata: {\n    imports: [RouterTestingModule, MatButtonModule],\n  },\n})"
+            },
+            {
+                "name": "context",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/test.ts",
+                "type": "",
+                "defaultValue": "require.context('./', true, /\\.spec\\.ts$/)"
+            },
+            {
+                "name": "Elements",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/services/utils.service.ts",
+                "type": "",
+                "defaultValue": "PrismicDOM.RichText.Elements"
+            },
+            {
+                "name": "environment",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/environments/environment.prod.ts",
+                "type": "object",
+                "defaultValue": "{\n  production: true\n}"
+            },
+            {
+                "name": "environment",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/environments/environment.ts",
+                "type": "object",
+                "defaultValue": "{\n  production: false\n}"
+            },
+            {
+                "name": "getAllTags",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/track/track.service.ts",
+                "type": "",
+                "defaultValue": "gql`\n  {\n    allTracks {\n      edges {\n        node {\n          _meta {\n            tags\n          }\n        }\n      }\n    }\n  }\n`"
+            },
+            {
+                "name": "getAllTracks",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/track/track.service.ts",
+                "type": "",
+                "defaultValue": "gql`\n  query {\n    allTracks(sortBy: track_ASC) {\n      edges {\n        node {\n          _meta {\n            uid\n          }\n          track\n          trackImage\n          content\n          link {\n            __typename\n            ... on _ExternalLink {\n              url\n            }\n          }\n          location\n        }\n      }\n    }\n  }\n`"
+            },
+            {
+                "name": "Large",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/Button.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "LoggedIn",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/Header.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "LoggedIn",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/Page.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "LoggedOut",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/Header.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "LoggedOut",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/Page.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "Primary",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/Button.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "Primary",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/track/containers/track-list/track-list.stories.ts",
+                "type": "",
+                "defaultValue": "() => ({\n  component: TrackListComponent,\n  props: {\n    label: 'Button',\n  },\n})"
+            },
+            {
+                "name": "require",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/test.ts",
+                "type": "any"
+            },
+            {
+                "name": "Secondary",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/Button.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "Small",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/Button.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/Button.stories.ts",
+                "type": "Story<Button>",
+                "defaultValue": "(args: Button) => ({\n  component: Button,\n  props: args,\n})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/Header.stories.ts",
+                "type": "Story<Header>",
+                "defaultValue": "(args: Header) => ({\n  component: Header,\n  props: args,\n})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/Page.stories.ts",
+                "type": "Story<Page>",
+                "defaultValue": "(args: Page) => ({\n  component: Page,\n  props: args,\n})"
+            }
+        ],
+        "functions": [],
+        "typealiases": [],
+        "enumerations": [],
+        "groupedVariables": {
+            "src/app/track/containers/track-card/track-card.stories.ts": [
+                {
+                    "name": "Card",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/track/containers/track-card/track-card.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => ({\n  component: TrackCardComponent,\n  props: {\n    track: {\n      trackImage: 'https://via.placeholder.com/300x200',\n      trackLink: 'https://www.google.com',\n      trackName: 'Trackname',\n      trackContent: `\n        <h1>Track Content goes here</h1>\n        <p>More track content</p>\n`,\n    },\n  },\n  moduleMetadata: {\n    imports: [RouterTestingModule, MatButtonModule],\n  },\n})"
+                }
+            ],
+            "src/test.ts": [
+                {
+                    "name": "context",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/test.ts",
+                    "type": "",
+                    "defaultValue": "require.context('./', true, /\\.spec\\.ts$/)"
+                },
+                {
+                    "name": "require",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/test.ts",
+                    "type": "any"
+                }
+            ],
+            "src/app/services/utils.service.ts": [
+                {
+                    "name": "Elements",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/services/utils.service.ts",
+                    "type": "",
+                    "defaultValue": "PrismicDOM.RichText.Elements"
+                }
+            ],
+            "src/environments/environment.prod.ts": [
+                {
+                    "name": "environment",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/environments/environment.prod.ts",
+                    "type": "object",
+                    "defaultValue": "{\n  production: true\n}"
+                }
+            ],
+            "src/environments/environment.ts": [
+                {
+                    "name": "environment",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/environments/environment.ts",
+                    "type": "object",
+                    "defaultValue": "{\n  production: false\n}"
+                }
+            ],
+            "src/app/track/track.service.ts": [
+                {
+                    "name": "getAllTags",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/track/track.service.ts",
+                    "type": "",
+                    "defaultValue": "gql`\n  {\n    allTracks {\n      edges {\n        node {\n          _meta {\n            tags\n          }\n        }\n      }\n    }\n  }\n`"
+                },
+                {
+                    "name": "getAllTracks",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/track/track.service.ts",
+                    "type": "",
+                    "defaultValue": "gql`\n  query {\n    allTracks(sortBy: track_ASC) {\n      edges {\n        node {\n          _meta {\n            uid\n          }\n          track\n          trackImage\n          content\n          link {\n            __typename\n            ... on _ExternalLink {\n              url\n            }\n          }\n          location\n        }\n      }\n    }\n  }\n`"
+                }
+            ],
+            "src/stories/Button.stories.ts": [
+                {
+                    "name": "Large",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Button.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Primary",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Button.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Secondary",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Button.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Small",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Button.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Button.stories.ts",
+                    "type": "Story<Button>",
+                    "defaultValue": "(args: Button) => ({\n  component: Button,\n  props: args,\n})"
+                }
+            ],
+            "src/stories/Header.stories.ts": [
+                {
+                    "name": "LoggedIn",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Header.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "LoggedOut",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Header.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Header.stories.ts",
+                    "type": "Story<Header>",
+                    "defaultValue": "(args: Header) => ({\n  component: Header,\n  props: args,\n})"
+                }
+            ],
+            "src/stories/Page.stories.ts": [
+                {
+                    "name": "LoggedIn",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Page.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "LoggedOut",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Page.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Page.stories.ts",
+                    "type": "Story<Page>",
+                    "defaultValue": "(args: Page) => ({\n  component: Page,\n  props: args,\n})"
+                }
+            ],
+            "src/app/track/containers/track-list/track-list.stories.ts": [
+                {
+                    "name": "Primary",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/track/containers/track-list/track-list.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => ({\n  component: TrackListComponent,\n  props: {\n    label: 'Button',\n  },\n})"
+                }
+            ]
+        },
+        "groupedFunctions": {},
+        "groupedEnumerations": {},
+        "groupedTypeAliases": {}
+    },
+    "routes": [],
+    "coverage": {
+        "count": 2,
+        "status": "low",
+        "files": [
+            {
+                "filePath": "e2e/src/app.po.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "AppPage",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/app.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "AppComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/2",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/app.module.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "SentryErrorHandler",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/services/query-service.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "QueryServiceService",
+                "coveragePercent": 0,
+                "coverageCount": "0/6",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/services/utils.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "UtilsService",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/services/utils.service.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Elements",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/track/containers/report-track/report-track.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "ReportTrackComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/track/containers/track-card/track-card.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "TrackCardComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/track/containers/track-card/track-card.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Card",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/track/containers/track-detail/track-detail.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "TrackDetailComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/track/containers/track-filters/track-filters.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "TrackFiltersComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/8",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/track/containers/track-list/track-list.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "TrackListComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/6",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/track/containers/track-list/track-list.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Primary",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/track/models/tags.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "Tags",
+                "coveragePercent": 0,
+                "coverageCount": "0/2",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/track/models/track.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "Track",
+                "coveragePercent": 0,
+                "coverageCount": "0/7",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/track/track.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "TrackService",
+                "coveragePercent": 0,
+                "coverageCount": "0/11",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/track/track.service.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "getAllTags",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/track/track.service.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "getAllTracks",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/ui/containers/footer/footer.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "FooterComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/ui/containers/header/header.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "HeaderComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/ui/containers/layout/layout.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "LayoutComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/environments/environment.prod.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "environment",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/environments/environment.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "environment",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/Button.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Large",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/Button.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Primary",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/Button.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Secondary",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/Button.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Small",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/Button.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/Header.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "LoggedIn",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/Header.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "LoggedOut",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/Header.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/Page.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "LoggedIn",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/Page.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "LoggedOut",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/Page.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/button.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "ButtonComponent",
+                "coveragePercent": 83,
+                "coverageCount": "5/6",
+                "status": "very-good"
+            },
+            {
+                "filePath": "src/stories/header.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "HeaderComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/page.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "PageComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/test.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "context",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/test.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "require",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            }
+        ]
+    }
+}
