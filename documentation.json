@@ -894,7 +894,7 @@
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": ":host {\n  background: rgba(0, 0, 0, .7);\n  grid-area: header;\n  display: flex;\n  height: 100px;\n  width: 100vw;\n  justify-content: center;\n}\n\n.logo {\n  margin: 0 1rem;\n  width: 50px;\n}\n\nh1 {\n  align-self: center;\n  color: #c0ec23;\n  font-family: 'Alata', sans-serif;\n  font-size: 2rem;\n  font-weight: bold;\n  text-transform: uppercase;\n  margin: 0;\n}\n",
+                    "data": ":host {\n  background: rgba(0, 0, 0, .7);\n  grid-area: header;\n  display: flex;\n  height: 100px;\n  width: 100vw;\n  justify-content: center;\n}\n\n.logo {\n  margin: 0 1rem;\n  width: 50px;\n}\n\nh1 {\n  align-self: center;\n  color: #c0ec23;\n  font-family: 'Alata', sans-serif;\n  font-size: 2rem;\n  font-weight: bold;\n  text-transform: uppercase;\n  margin: 0;\n}\n\na {\n  display: flex;\n  text-decoration: none;\n}\n",
                     "styleUrl": "./header.component.scss"
                 }
             ],
@@ -911,7 +911,7 @@
             "isDuplicate": true,
             "duplicateId": 1,
             "duplicateName": "HeaderComponent-1",
-            "templateData": "<img\n  src=\"./assets/images/logo.svg\"\n  alt=\"bmx tracks logo\"\n  class=\"logo\"\n/>\n<h1>BMX Tracks</h1>\n\n\n\n"
+            "templateData": "<a routerLink=\"/\">\n  <img\n    src=\"./assets/images/logo.svg\"\n    alt=\"bmx tracks logo\"\n    class=\"logo\"\n  />\n  <h1>BMX Tracks</h1>\n</a>\n\n\n\n\n"
         },
         {
             "name": "LayoutComponent",
@@ -1147,7 +1147,7 @@
             "implements": [
                 "OnInit"
             ],
-            "templateData": "\n  <div class=\"flex center\">\n    <img *ngIf=\"track.trackImage\" [src]=\"track.trackImage\"\n         width=\"200px\"\n         height=\"200px\"\n         alt=\"bmx track image\"\n         loading=\"lazy\"\n    />\n  </div>\n  <a href=\"{{track.trackLink}}\" target=\"_blank\" rel=\"noopener\">\n    <h2>{{track.trackName}}</h2>\n  </a>\n  <div class=\"content\">\n    <div [innerHTML]=\"track.trackContent\"></div>\n  </div>\n  <div class=\"flex center more-info\">\n    <a mat-stroked-button [routerLink]=\"['/tracks', track.uid]\">Meer info</a><br>\n  </div>\n"
+            "templateData": "\n  <div class=\"flex center\">\n    <img *ngIf=\"track.trackImage\" [src]=\"track.trackImage\"\n         width=\"200px\"\n         height=\"200px\"\n         alt=\"bmx track image\"\n         loading=\"lazy\"\n    />\n  </div>\n  <a href=\"{{track.trackLink}}\" target=\"_blank\" rel=\"noopener\">\n    <h2>{{track.trackName}}</h2>\n  </a>\n  <div class=\"content\">\n    <div [innerHTML]=\"track.trackContent\"></div>\n  </div>\n  <div class=\"flex center more-info\">\n    <a mat-stroked-button [routerLink]=\"['/tracks', track.uid]\">Meer info</a>\n  </div>\n"
         },
         {
             "name": "TrackDetailComponent",
@@ -1717,7 +1717,7 @@
                 "subtype": "variable",
                 "file": "src/app/track/containers/track-card/track-card.stories.ts",
                 "type": "",
-                "defaultValue": "() => ({\n  component: TrackCardComponent,\n  props: {\n    track: {\n      trackImage: 'https://via.placeholder.com/300x200',\n      trackLink: 'https://www.google.com',\n      trackName: 'Trackname',\n      trackContent: `\n        <h1>Track Content goes here</h1>\n        <p>More track content</p>\n`,\n    },\n  },\n})"
+                "defaultValue": "() => ({\n  component: TrackCardComponent,\n  props: {\n    track: {\n      trackImage: 'https://via.placeholder.com/300x200',\n      trackLink: 'https://www.google.com',\n      trackName: 'Trackname',\n      trackContent: `\n        <h1>Track Content goes here</h1>\n        <p>More track content</p>\n`,\n    },\n  },\n  moduleMetadata: {\n    imports: [RouterTestingModule, MatButtonModule],\n  },\n})"
             },
             {
                 "name": "context",
@@ -1779,7 +1779,7 @@
                 "name": "LoggedIn",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/stories/Page.stories.ts",
+                "file": "src/stories/Header.stories.ts",
                 "type": "",
                 "defaultValue": "Template.bind({})"
             },
@@ -1787,14 +1787,6 @@
                 "name": "LoggedIn",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/stories/Header.stories.ts",
-                "type": "",
-                "defaultValue": "Template.bind({})"
-            },
-            {
-                "name": "LoggedOut",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
                 "file": "src/stories/Page.stories.ts",
                 "type": "",
                 "defaultValue": "Template.bind({})"
@@ -1804,6 +1796,14 @@
                 "ctype": "miscellaneous",
                 "subtype": "variable",
                 "file": "src/stories/Header.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "LoggedOut",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/Page.stories.ts",
                 "type": "",
                 "defaultValue": "Template.bind({})"
             },
@@ -1858,17 +1858,17 @@
                 "name": "Template",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/stories/Page.stories.ts",
-                "type": "Story<Page>",
-                "defaultValue": "(args: Page) => ({\n  component: Page,\n  props: args,\n})"
+                "file": "src/stories/Header.stories.ts",
+                "type": "Story<Header>",
+                "defaultValue": "(args: Header) => ({\n  component: Header,\n  props: args,\n})"
             },
             {
                 "name": "Template",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/stories/Header.stories.ts",
-                "type": "Story<Header>",
-                "defaultValue": "(args: Header) => ({\n  component: Header,\n  props: args,\n})"
+                "file": "src/stories/Page.stories.ts",
+                "type": "Story<Page>",
+                "defaultValue": "(args: Page) => ({\n  component: Page,\n  props: args,\n})"
             }
         ],
         "functions": [],
@@ -1882,7 +1882,7 @@
                     "subtype": "variable",
                     "file": "src/app/track/containers/track-card/track-card.stories.ts",
                     "type": "",
-                    "defaultValue": "() => ({\n  component: TrackCardComponent,\n  props: {\n    track: {\n      trackImage: 'https://via.placeholder.com/300x200',\n      trackLink: 'https://www.google.com',\n      trackName: 'Trackname',\n      trackContent: `\n        <h1>Track Content goes here</h1>\n        <p>More track content</p>\n`,\n    },\n  },\n})"
+                    "defaultValue": "() => ({\n  component: TrackCardComponent,\n  props: {\n    track: {\n      trackImage: 'https://via.placeholder.com/300x200',\n      trackLink: 'https://www.google.com',\n      trackName: 'Trackname',\n      trackContent: `\n        <h1>Track Content goes here</h1>\n        <p>More track content</p>\n`,\n    },\n  },\n  moduleMetadata: {\n    imports: [RouterTestingModule, MatButtonModule],\n  },\n})"
                 }
             ],
             "src/test.ts": [
@@ -1992,32 +1992,6 @@
                     "defaultValue": "(args: Button) => ({\n  component: Button,\n  props: args,\n})"
                 }
             ],
-            "src/stories/Page.stories.ts": [
-                {
-                    "name": "LoggedIn",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/stories/Page.stories.ts",
-                    "type": "",
-                    "defaultValue": "Template.bind({})"
-                },
-                {
-                    "name": "LoggedOut",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/stories/Page.stories.ts",
-                    "type": "",
-                    "defaultValue": "Template.bind({})"
-                },
-                {
-                    "name": "Template",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/stories/Page.stories.ts",
-                    "type": "Story<Page>",
-                    "defaultValue": "(args: Page) => ({\n  component: Page,\n  props: args,\n})"
-                }
-            ],
             "src/stories/Header.stories.ts": [
                 {
                     "name": "LoggedIn",
@@ -2042,6 +2016,32 @@
                     "file": "src/stories/Header.stories.ts",
                     "type": "Story<Header>",
                     "defaultValue": "(args: Header) => ({\n  component: Header,\n  props: args,\n})"
+                }
+            ],
+            "src/stories/Page.stories.ts": [
+                {
+                    "name": "LoggedIn",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Page.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "LoggedOut",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Page.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Page.stories.ts",
+                    "type": "Story<Page>",
+                    "defaultValue": "(args: Page) => ({\n  component: Page,\n  props: args,\n})"
                 }
             ],
             "src/app/track/containers/track-list/track-list.stories.ts": [

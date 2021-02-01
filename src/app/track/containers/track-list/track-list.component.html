@@ -2,19 +2,7 @@
 <ng-template #loading>
   <ul class="skeleton">
     <li *ngFor="let track of skeleton(4)">
-      <div class="flex center">
-        <svg xmlns="http://www.w3.org/2000/svg" width="300" height="200" viewBox="0 0 300 200">
-          <rect fill="#ddd" width="300" height="200"/>
-          <text fill="rgba(0,0,0,0.5)" font-family="sans-serif" font-size="30" dy="10.5" font-weight="bold" x="50%" y="50%" text-anchor="middle">300×200</text>
-        </svg>
-      </div>
-      <h2><a href="#" target="_blank" rel="noopener">SKELETON LINK</a></h2>
-      <div class="content">
-        <div class="content skeleton-content"></div>
-      </div>
-      <div class="flex center skeleton-more-info more-info">
-        <a mat-stroked-button class="skeleton-button"></a><br>
-      </div>
+      <app-track-skeleton></app-track-skeleton>
     </li>
   </ul>
 </ng-template>
