@@ -1,40 +1,59 @@
 {
-  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
-  "newProjectRoot": "projects",
+  "cli": {
+    "defaultCollection": "@nrwl/angular",
+    "analytics": "b3a70b53-2c1c-407f-a3a1-11fa45a439c2"
+  },
+  "schematics": {
+    "@nrwl/angular": {
+      "application": {
+        "linter": "eslint"
+      },
+      "library": {
+        "linter": "eslint"
+      },
+      "storybook-configuration": {
+        "linter": "eslint"
+      }
+    },
+    "@nrwl/angular:application": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    },
+    "@nrwl/angular:component": {
+      "style": "scss"
+    }
+  },
+  "defaultProject": "bmxtracks",
   "projects": {
     "bmxtracks": {
       "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        }
-      },
-      "root": "",
-      "sourceRoot": "src",
-      "prefix": "app",
+      "root": "apps/bmxtracks",
+      "sourceRoot": "apps/bmxtracks/src",
+      "prefix": "bmxtracks",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "allowedCommonJsDependencies": [
-              "graphql-tag",
-              "zen-observable"
-            ],
-            "outputPath": "dist/bmx-tracks",
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.app.json",
+            "outputPath": "dist/apps/bmxtracks",
+            "index": "apps/bmxtracks/src/index.html",
+            "main": "apps/bmxtracks/src/main.ts",
+            "polyfills": "apps/bmxtracks/src/polyfills.ts",
+            "tsConfig": "apps/bmxtracks/tsconfig.app.json",
             "aot": true,
             "assets": [
-              "src/favicon.ico",
-              "src/assets",
-              "src/_redirects",
-              "src/manifest.webmanifest"
+              "apps/bmxtracks/src/favicon.ico",
+              "apps/bmxtracks/src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "apps/bmxtracks/src/styles.scss"
             ],
             "scripts": []
           },
@@ -42,8 +61,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "replace": "apps/bmxtracks/src/environments/environment.ts",
+                  "with": "apps/bmxtracks/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -61,11 +80,10 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
                 }
-              ],
-              "serviceWorker": true,
-              "ngswConfigPath": "ngsw-config.json"
+              ]
             }
           }
         },
@@ -86,41 +104,37 @@
             "browserTarget": "bmxtracks:build"
           }
         },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets",
-              "src/manifest.webmanifest"
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
-            "scripts": []
-          }
-        },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@nrwl/linter:eslint",
           "options": {
-            "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "apps/bmxtracks/src/**/*.ts",
+              "apps/bmxtracks/src/**/*.html"
             ]
           }
         },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/bmxtracks"
+          ],
           "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
+            "jestConfig": "apps/bmxtracks/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "bmxtracks-e2e": {
+      "root": "apps/bmxtracks-e2e",
+      "sourceRoot": "apps/bmxtracks-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/bmxtracks-e2e/cypress.json",
+            "tsConfig": "apps/bmxtracks-e2e/tsconfig.e2e.json",
             "devServerTarget": "bmxtracks:serve"
           },
           "configurations": {
@@ -128,12 +142,16 @@
               "devServerTarget": "bmxtracks:serve:production"
             }
           }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/bmxtracks-e2e/**/*.{js,ts}"
+            ]
+          }
         }
       }
     }
-  },
-  "defaultProject": "bmxtracks",
-  "cli": {
-    "analytics": "32b6710f-6c6f-4651-8917-d0eb233a5673"
   }
 }
